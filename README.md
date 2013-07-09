@@ -1,7 +1,7 @@
 A simple vows based wrapper for jquery.couch.js.
 ------
 
-The promises implementation is the one from Douglas Crockford. Simple
+The promises implementation is the one from [https://github.com/douglascrockford/monad/raw/master/vow.js](Douglas Crockford). Simple
 and sufficient.
 
 It is mirroring almost all functionality of the jquery javascript
@@ -11,7 +11,7 @@ instead of expecting success and error callbacks passed in.
 I added a few more utility functions mainly to easily configure and modify
 security objects and design documents.
 
-One addition is an implemention of
+One addition is an implementation of
 
 	1. GET docid?conflicts=true
 	2. For each member in the _conflicts array:
