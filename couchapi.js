@@ -14,9 +14,11 @@ define(
       { "use strict";
         // var log = logger('couchapi');
         var api = {};
+        var defaultDesignDocName = 'auth';
         
-        api.init = function(url) {
+        api.init = function(url, aDefaultDesignDocName) {
             $.couch.urlPrefix = url;
+            defaultDesignDocName = aDefaultDesignDocName || defaultDesignDocName;
         };
         
         api.config = function(section, option, value){
@@ -243,7 +245,7 @@ define(
         
         
         api.dbDesignDoc = function(group, funName, funStr, aDbName) {
-            return api.dbDesign('auth', group, funName, funStr, aDbName);
+            return api.dbDesign(defaultDesignDocName, group, funName, funStr, aDbName);
         };
         
         api.dbFilter = function(filterName, funStr, aDbName) {
@@ -325,38 +327,58 @@ define(
             return vow.promise;
         };
         
-        
-        api.docResolveConflict = function(doc, resolver, aDbName) {
+        //pass in a doc or id you suspect has conflicts.
+        //resolver is called to decide between conflicting revs
+        //if resolver is left out, a promise is returned with the revs to
+        //choose from, and a continuing function to call when you've decided
+        //which is the winning rev, pass in its index. Again a promise
+        //is returned of good things achieved..
+        api.docResolveConflicts = function(doc, resolver, aDbName) {
             var vow = VOW.make();
+            if (typeof resolver !== 'function') aDbName = resolver;
             if (aDbName) dbName = aDbName;
             var id = doc.id ? doc.id : doc;
             
-            function resolveConflict(revs, winningRev) {
+            function prepRevs(revs, winningRev) {
                 for (var i=0; i<revs.length; i++) {
                     if (i !== winningRev) {
                         var r = revs[i];
                         revs[i] = { _id: r._id, _rev: r._rev,  _deleted : true };
                     }
                 }
-                api.docBulkSave(revs).when(
-                    function(data) {
-                        vow.keep(data);
-                    },
-                    function(data) {
-                        vow['break'](data);
-                    }
-                    
-                );
             }
             
             api.docConflicts(id).when(
                 function(revs) {
-                    if (revs.length === 1) vow.keep(revs[0]);
-                    else resolveConflict(revs, resolver(revs));
-                },
-                function(data) {
-                    vow['break'](data);
-                }
+                    if (revs.length === 1) {
+                        if (typeof resolver === 'function')
+                            vow.keep(revs[0]);   
+                        else {
+                            vow.keep({
+                                revs: revs,
+                                fun: function() { return VOW.kept(); }
+                            });
+                        }
+                    }
+                    else {
+                        if (typeof resolver === 'function') {
+                            prepRevs(revs, resolver(revs));
+                            api.docBulkSave(revs).when(
+                                function(data) { vow.keep(data); },
+                                function(data) { vow['break'](data); }
+                            );
+                        }
+                        else vow.keep(
+                            { revs: revs,
+                              fun: function(winningRev) {
+                                  prepRevs(revs, winningRev);
+                                  return api.docBulkSave(revs);
+                              }
+                            }
+                        );
+                    }
+                }, 
+                function(data) { vow['break'](data); }
             );
             return vow.promise;
         };
@@ -432,9 +454,9 @@ define(
             if (aDbName) dbName = aDbName;
             var vow = VOW.make(); 
             $.couch.db(dbName).allDocs({
-                    success: function(data) {
-                        vow.keep(data);
-                    },
+                success: function(data) {
+                    vow.keep(data);
+                },
                 error: function(status) {
                     vow['break'](status);
                 }
@@ -568,9 +590,9 @@ define(
         api.activeTasks = function() {
             var vow = VOW.make(); 
             $.couch.activeTasks({
-                    success: function(data) {
-                        vow.keep(data);
-                    },
+                success: function(data) {
+                    vow.keep(data);
+                },
                 error: function(status) {
                     vow['break'](status);
                 }
@@ -586,27 +608,27 @@ define(
         
         var conflictsView = {"map" : conflictsMap.toString()};
         
-            function checkForConflictsView() {
-                var vow = VOW.make();
+        function checkForConflictsView() {
+            var vow = VOW.make();
                 api.dbDesign('couchapi', 'views', 'conflicts', "?").
-                    when(
-                        function(data) {
-                            vow.keep(data);
-                        }
-                        ,function() {
-                            api.dbDesign('couchapi', 'views', 'conflicts', conflictsView).
-                                when(
-                                    function(data) {
-                                        vow.keep(data);
-                                    }
-                                    ,function(data) {
-                                        vow['break'](data);
-                                    }
-                                );
-                        }
-                    );
-                return vow.promise;
-            }
+                when(
+                    function(data) {
+                        vow.keep(data);
+                    }
+                    ,function() {
+                        api.dbDesign('couchapi', 'views', 'conflicts', conflictsView).
+                            when(
+                                function(data) {
+                                    vow.keep(data);
+                                }
+                                ,function(data) {
+                                    vow['break'](data);
+                                }
+                            );
+                    }
+                );
+            return vow.promise;
+        }
         
         function getRevs(ids) {
             var vow = VOW.make();
@@ -650,6 +672,7 @@ define(
                 }
             ).when(
                 function(data) {
+                    console.log(data);
                     var idsWithConflicts = {};
                     data.rows.forEach(function(r){
                         idsWithConflicts[r.id] = r.value; 
@@ -703,7 +726,7 @@ define(
             if (repDoc.role)
                 repDoc.user_ctx = { "roles": [repDoc.role] };
             if (repDoc.filterName)
-                repDoc.filter = 'auth/' + repDoc.filterName;
+                repDoc.filter = defaultDesignDocName + '/' + repDoc.filterName;
             return api.docSave(repDoc, '_replicator');
         };
         
