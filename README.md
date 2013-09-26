@@ -36,7 +36,16 @@ Not quite sure yet whether that is a good thing or not. [http://localhost:5984/_
 A good doc for the original jquery version is
 [http://bradley-holt.com/2011/07/couchdb-jquery-plugin-reference/]()
 
-More docs might follow.
+An idea is to adapt it so it can be used with pouchdb as well, just by setting a parameter.
+
+If you have an app that mainly talks to CouchDB it is nice to have a light weight adapter in the combination of couchapi and jquery.couch.js.
+
+But if you want to add functionality for using the browser's internal indexedb you just add pouchdb.js to your site and set the parameter on couchapi, withouth changing any code of your app.
+
+TODO
+
+* Not all of the functions return proper error messages yet.
+* More docs may follow.
 
 
 
