@@ -1,0 +1,16 @@
+#!/bin/sh
+
+rm -rf bower_components
+rm -rf node_modules
+npm install fs-extra
+node package.js
+npm install
+node bower.js
+bower install
+rm -rf .git
+git init
+git add -A
+git commit -m 'first commit'
+chmod uga-x ./init
+echo "Installed bower and npm packages and made your first commit!"
+
