@@ -1,7 +1,16 @@
-/*global Cookie:false $:false VOW:false PBKDF2:false isc:false define:false emit:false*/
-/*jshint strict:true unused:true smarttabs:true eqeqeq:true immed: true undef:true*/
-/*jshint maxparams:10 maxcomplexity:7 maxlen:130 devel:true newcap:false*/
+//A simple vows based wrapper for jquery.couch.js.
+//---
 
+// It is mirroring almost all functionality of the jquery javascript adapter that
+// comes with futon, but the functions are returning vows instead of expecting
+// success and error callbacks passed in.
+
+// I added a few more utility functions mainly to easily configure and modify
+// security objects and design documents.
+//
+//-------
+
+//Make this file useful when included as a simple script tag as well
 if (!window.define) {
     window.define = function (obj) {
         window.couchapi = obj.factory();
@@ -12,19 +21,19 @@ define(
     { inject: [], 
       factory: function() 
       { "use strict";
-        // var log = logger('couchapi');
         var api = {};
         var defaultDesignDocName = 'auth';
         
         api.withCredentials = function(withCred) {
-            console.log('in coucapi');
-           $.couch.withCredentials(withCred); 
+            console.log('in couchapi');
+            $.couch.withCredentials(withCred); 
         };
         
         api.init = function(url, aDefaultDesignDocName) {
             $.couch.urlPrefix = url;
             defaultDesignDocName = aDefaultDesignDocName || defaultDesignDocName;
         };
+        
         
         api.config = function(section, option, value){
             var vow = VOW.make(); 
@@ -61,8 +70,8 @@ define(
         };
 
         
-        
-        //---------------------sessions
+        //Sessions
+        //---------------------
         api.login = function(name, pwd) {
             var vow = VOW.make(); 
             $.couch.login({
@@ -94,7 +103,8 @@ define(
         };
         
         
-        //----------------------Databases
+        // Databases
+        //----------------------
         api.dbAll = function() {
             var vow = VOW.make(); 
             $.couch.allDbs({
@@ -170,7 +180,7 @@ define(
                         data.reason = reason;
                     else data.reason = reason.responseText;
                         
-                 vow.break(data);   
+                    vow.break(data);   
                 }
             });
             
@@ -436,7 +446,7 @@ define(
                 "include_docs": true,
                 success: vow.keep,
                 error: function(status, reason) {
-                  vow.break(reason);
+                    vow.break(reason);
                 }
             });
             return vow.promise;
@@ -450,7 +460,7 @@ define(
                 success: vow.keep,
                 
                 error: function(status, reason) {
-                  vow.break(reason); }
+                    vow.break(reason); }
                 
             });
             return vow.promise;
@@ -506,7 +516,7 @@ define(
                         data.reason = reason;
                     else data.reason = error;
                         
-                 vow.break(data);   
+                    vow.break(data);   
                 }
             });
             return vow.promise;
@@ -585,7 +595,7 @@ define(
         
         function checkForConflictsView() {
             var vow = VOW.make();
-                api.dbDesign('couchapi', 'views', 'conflicts', "?").
+            api.dbDesign('couchapi', 'views', 'conflicts', "?").
                 when(
                     vow.keep
                     ,function() {
@@ -602,19 +612,19 @@ define(
         function getRevs(ids) {
             var vow = VOW.make();
             var getters = {};
-            var idVows = [];
-            Object.keys(ids).forEach(function(id) {
-                getters[id] = [];
-                var revs = ids[id]; 
-                revs.forEach(function(rev) {
-                    getters[id].push(api.docGet(id, { 'rev': rev}));
+                var idVows = [];
+                Object.keys(ids).forEach(function(id) {
+                    getters[id] = [];
+                    var revs = ids[id]; 
+                    revs.forEach(function(rev) {
+                        getters[id].push(api.docGet(id, { 'rev': rev}));
+                    });
+                    idVows.push(VOW.every(getters[id]));
                 });
-                idVows.push(VOW.every(getters[id]));
-            });
             if (idVows.length === 0) vow.keep([]);
             else VOW.every(idVows).when(
                 function(data) {
-                    var conflicts = {};
+                        var conflicts = {};
                     data.forEach(function(doc) {
                         conflicts[doc[0]._id] = doc;
                     });
@@ -640,7 +650,7 @@ define(
             ).when(
                 function(data) {
                     console.log(data);
-                    var idsWithConflicts = {};
+                        var idsWithConflicts = {};
                     data.rows.forEach(function(r){
                         idsWithConflicts[r.id] = r.value; 
                     });
@@ -766,7 +776,7 @@ define(
                 );
             }
             else api.userGet(name).when(
-               vow.keep,
+                vow.keep,
                 vow.break
             );
             return vow.promise;

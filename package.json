@@ -1,0 +1,36 @@
+{
+  "name": "couchapi",
+  "description": "Promise based wrapper for jquery.couch.js",
+  "homepage": "https://github.com/michieljoris/couchapi",
+  "keywords": [
+    "couchdb"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/michieljoris/web-scaffold.git"
+  },
+  "author": {
+    "name": "Michiel van Oosten",
+    "email": "mail@axion5.net",
+    "url": "http://www.axion5.net/"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.6.x"
+  },
+  "dependencies": {
+    "fs-extra": "0.8.x"
+  },
+  "devDependencies": {
+    "doccoh": "*"
+  },
+  "private": false,
+  "scripts": {
+    "dist": "node dist; node_modules/.bin/doccoh src/package.js"
+  },
+  "version": "0.0.2"
+}

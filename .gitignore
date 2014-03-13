@@ -1,2 +1,4 @@
 .tern-port
 .#*
+bower_components
+node_modules

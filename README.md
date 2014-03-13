@@ -24,17 +24,18 @@ One addition is an implementation of
 	the other revs.
 	
 as described in
-[http://wiki.apache.org/couchdb/Replication_and_conflicts]()
+[http://wiki.apache.org/couchdb/Replication_and_conflicts](http://wiki.apache.org/couchdb/Replication_and_conflicts)
 
 The application-specific merging can be done by passing in a resolver
 or before calling a returned continuing function.
 
-The bulkSave operation is not atomic, unlike the ruby example
-implementation.
-Not quite sure yet whether that is a good thing or not. [http://localhost:5984/_utils/docs/api/database.html?highlight=bulk#post-db-bulk-docs]()
+The bulkSave operation is not atomic, unlike the ruby example implementation.
+Not quite sure yet whether that is a good thing or
+not. [http://localhost:5984/_utils/docs/api/database.html?highlight=bulk#post-db-bulk-docs](http://localhost:5984/_utils/docs/api/database.html?highlight=bulk#post-db-bulk-docs)
 
 A good doc for the original jquery version is
-[http://bradley-holt.com/2011/07/couchdb-jquery-plugin-reference/]()
+[http://bradley-holt.com/2011/07/couchdb-jquery-plugin-reference/](http://bradley-holt.com/2011/07/couchdb-jquery-plugin-reference/) and
+[http://daleharvey.github.io/jquery.couch.js-docs/symbols/index.html](http://daleharvey.github.io/jquery.couch.js-docs/symbols/index.html)
 
 More docs might follow.
 
