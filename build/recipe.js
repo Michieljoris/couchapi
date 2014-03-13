@@ -69,7 +69,7 @@ var exports = {
       two char if you have variable length and let bb-server recognize the stamp
       by a prefix. Only risk is to loose the manifest.
     */ 
-    ,cachify: !develop_mode 
+    // ,cachify: !develop_mode 
     // ,cachify: true
     //hash or mtime, query or modified filename
     // ,cachify : {
@@ -111,7 +111,7 @@ var exports = {
             // ,recaptcha: '<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>'
             // ,fragment: '<meta name="fragment" content="!">'
             
-            ,hello_world: '<h2>2Hello world. Build on this scaffold!!!</h2>'
+            ,hello_world: '<h2>couchapi test</h2>'
         }
         ,metaBlock : {
             id: 'meta',
@@ -163,10 +163,19 @@ var exports = {
                     
                     // ,'vendor/noconsole.js'
                     
+                    //,'vendor/jquery-1.6.2.min.js'
+                    'vendor/jquery-1.8.3.min.js'
+                    //,'vendor/jquery-1.9.1.min.js'
+                    //,'vendor/jquery-1.9.1.min.js'
+                    
+                    ,'vendor/vow.js'
+                    
                     // ,'router'
                     // ,'angular.js'
-                    ,'test.coffee'
-                    
+                    // ,'test.coffee'
+                    ,'jquery.couch.js',
+                    'couchapi.js'
+                    ,'main.js'    
                 ],
                 path: 'scripts/'
             }
