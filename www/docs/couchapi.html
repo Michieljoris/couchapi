@@ -7,26 +7,26 @@ security objects and design documents.</p>
 
 <hr />             </td>             <td class="code">               <div class="highlight"><pre>
 </pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Make this script useable in multiple environments</p>             </td>             <td class="code">               <div class="highlight"><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(root, factory)</span> {</span>
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports === <span class="hljs-string">'object'</span>) {
-</pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>CommonJS</p>             </td>             <td class="code">               <div class="highlight"><pre>    module.exports = factory();
-  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">'function'</span>) {
-      <span class="hljs-keyword">if</span> (define.amd) 
-</pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>AMD</p>             </td>             <td class="code">               <div class="highlight"><pre>          define([], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(b)</span> {</span>
-              <span class="hljs-keyword">return</span> (root.returnExportsGlobal = factory(b));
-          });
-      <span class="hljs-keyword">else</span>
-</pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p><a href="//github.com/michieljoris/bootstrapjs">bootstrapjs</a></p>             </td>             <td class="code">               <div class="highlight"><pre>          define({inject: [], factory: factory() });
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports === <span class="hljs-string">'object'</span>) {
+</pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>CommonJS</p>             </td>             <td class="code">               <div class="highlight"><pre>        module.exports = factory(<span class="hljs-built_in">require</span>(<span class="hljs-string">'./jquery.couch.js'</span>), <span class="hljs-built_in">require</span>(<span class="hljs-string">'dougs_vow'</span>));
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">'function'</span>) {
+        <span class="hljs-keyword">if</span> (define.amd) 
+</pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>AMD</p>             </td>             <td class="code">               <div class="highlight"><pre>            define([], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+                <span class="hljs-keyword">return</span> (root.couchapi = factory($.couch, VOW));
+            });
+        <span class="hljs-keyword">else</span>
+</pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p><a href="//github.com/michieljoris/bootstrapjs">bootstrapjs</a></p>             </td>             <td class="code">               <div class="highlight"><pre>            define({inject: [], factory: factory($.couch, VOW) });
       
-  } <span class="hljs-keyword">else</span> {
-</pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>Global variable</p>             </td>             <td class="code">               <div class="highlight"><pre>    root.couchapi = factory();
-  }
-}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> 
+    } <span class="hljs-keyword">else</span> {
+</pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>Global variable</p>             </td>             <td class="code">               <div class="highlight"><pre>        root.couchapi = factory($.couch, VOW);
+    }
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(couch_async, VOW)</span> 
   {</span> <span class="hljs-string">"use strict"</span>;
 </pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h1>API</h1>
 
 <h2>Couchdb</h2>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="hljs-keyword">var</span> api = {};
     <span class="hljs-keyword">var</span> dbName;
-    <span class="hljs-keyword">var</span> couch = $.couch;
+    <span class="hljs-keyword">var</span> couch = couch_async;
         
     <span class="hljs-keyword">var</span> defaultDesignDocName = <span class="hljs-string">'auth'</span>;
 </pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h3>init</h3>
@@ -79,7 +79,7 @@ server.</p>             </td>             <td class="code">               <div c
 </pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h3>log</h3>
 
 <p>Retrieve the couchdb log</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.log = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(bytes, offset)</span> {</span>
-        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        <span class="hljs-keyword">var</span> vow = VOW.make();
         couch.log({
 </pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <p>never gonna happen.. </p>             </td>             <td class="code">               <div class="highlight"><pre>            success: vow.keep,
 </pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <p>jquery.couch.js tries to parse the result, but it is not a json</p>             </td>             <td class="code">               <div class="highlight"><pre>            error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(status, req)</span> {</span>
@@ -89,7 +89,7 @@ responseText</p>             </td>             <td class="code">               <
             },
             bytes:bytes || <span class="hljs-number">1000</span> , offset:offset || <span class="hljs-number">0</span>
         });
-        <span class="hljs-keyword">return</span> vowed.promise;
+        <span class="hljs-keyword">return</span> vow.promise;
     };
         
 </pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <h2>Sessions</h2>
@@ -101,7 +101,7 @@ responseText</p>             </td>             <td class="code">               <
             name: name,
             password: pwd,
             withCredentials:<span class="hljs-literal">true</span> });
-        couch.login(vowed);
+        couch.login(vowed.options);
         <span class="hljs-keyword">return</span> vowed.promise;
     }; 
     
@@ -109,7 +109,7 @@ responseText</p>             </td>             <td class="code">               <
 
 <p>Delete your current CouchDB user session</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.logout = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
         <span class="hljs-keyword">var</span> vowed = vowerify();
-        couch.logout(vowed);
+        couch.logout(vowed.options);
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 
@@ -117,7 +117,7 @@ responseText</p>             </td>             <td class="code">               <
 
 <p>Returns the session information for the currently logged in user.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.session = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
         <span class="hljs-keyword">var</span> vowed = vowerify();
-        couch.session(vowed);
+        couch.session(vowed.options);
         <span class="hljs-keyword">return</span> vowed.promise;
     };
     
@@ -131,7 +131,7 @@ responseText</p>             </td>             <td class="code">               <
             name: name,
             roles: roles
         };
-        couch.signup(userDoc, pwd, vowed);
+        couch.signup(userDoc, pwd, vowed.options);
         <span class="hljs-keyword">return</span> vowed.promise;
     };
         
@@ -247,7 +247,7 @@ responseText</p>             </td>             <td class="code">               <
 
 <p>Returns a list of all the databases in the CouchDB instance</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbAll = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
         <span class="hljs-keyword">var</span> vowed = vowerify(); 
-        couch.allDbs(vowed);
+        couch.allDbs(vowed.options);
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 
@@ -262,7 +262,7 @@ database manipulation call optional</p>             </td>             <td class=
 <p>Remove a database</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
         <span class="hljs-keyword">if</span> (name) dbName = name;
         <span class="hljs-keyword">var</span> vowed = vowerify(); 
-        couch.db(dbName).drop(vowed);
+        couch.db(dbName).drop(vowed.options);
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 
@@ -271,7 +271,7 @@ database manipulation call optional</p>             </td>             <td class=
 <p>Create a new database named <em>name</em></p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbCreate = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
         <span class="hljs-keyword">if</span> (name) dbName = name;
         <span class="hljs-keyword">var</span> vowed = vowerify(); 
-        couch.db(dbName).create(vowed);
+        couch.db(dbName).create(vowed.options);
         <span class="hljs-keyword">return</span> vowed.promise;
     }; 
 
@@ -280,7 +280,7 @@ database manipulation call optional</p>             </td>             <td class=
 <p>Request compaction of the specified database.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbCompact = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
         <span class="hljs-keyword">if</span> (name) dbName = name;
         <span class="hljs-keyword">var</span> vowed = vowerify(); 
-        couch.db(dbName).compact(vowed);
+        couch.db(dbName).compact(vowed.options);
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 

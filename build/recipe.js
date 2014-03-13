@@ -164,9 +164,9 @@ var exports = {
                     // ,'vendor/noconsole.js'
                     
                     //,'vendor/jquery-1.6.2.min.js'
-                    'vendor/jquery-1.8.3.min.js'
+                    // 'vendor/jquery-1.8.3.min.js'
                     //,'vendor/jquery-1.9.1.min.js'
-                    //,'vendor/jquery-1.9.1.min.js'
+                    ,'vendor/jquery-1.9.1.min.js'
                     
                     ,'vendor/vow.js'
                     

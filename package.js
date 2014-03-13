@@ -45,7 +45,7 @@ module.exports = {
     // An array of keywords used to describe this package to search engines,
     // mainly for people searching within the npm universe.
     "keywords": [
-        "couchdb"
+        "couchdb", 
     ],
     // Where is the source of truth for this code, and what type of repo is it?
     "repository": {
@@ -93,17 +93,8 @@ module.exports = {
     // **NOTE:** We don't have any dependencies for this module. See the
     // `devDependencies` block for the way to include dependencies.
     "dependencies": {
-        // "bb-server": "0.4.x",
-        // "html-builder": "0.1.x",
-        // "bb-server": "git://github.com/michieljoris/bb-server.git",
-        // "html-builder": "git://github.com/michieljoris/html-builder.git",
-        
-        // "nodemailer": "0.5.x",
-        // "dbox": "0.6.x",
-        // "colors": "*",
-        "fs-extra": "0.8.x"
-	// "nodemailer": "*",
-	// "dbox": "*",
+        'jQuery': "1.7.*",
+        "dougs_vow": "*"
     },
     // What dependencies are useful only for developers?
     // Installed when we `npm install` in our working directory, but not 
@@ -114,6 +105,11 @@ module.exports = {
     // The packages we depend on for development:
     // * **doccoh**: Documentation utility for this code.
     "devDependencies": {
+        // "bb-server": "0.4.x",
+        // "html-builder": "0.1.x",
+        "bb-server": "git://github.com/michieljoris/bb-server.git",
+        "html-builder": "git://github.com/michieljoris/html-builder.git",
+        "fs-extra": "0.8.x",
         "doccoh": "*"
     },
     // Should this package be prevented from accidental publishing by npm?

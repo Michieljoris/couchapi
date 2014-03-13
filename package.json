@@ -23,14 +23,18 @@
     "node": ">= 0.6.x"
   },
   "dependencies": {
-    "fs-extra": "0.8.x"
+    "jQuery": "1.7.*",
+    "dougs_vow": "*"
   },
   "devDependencies": {
+    "bb-server": "git://github.com/michieljoris/bb-server.git",
+    "html-builder": "git://github.com/michieljoris/html-builder.git",
+    "fs-extra": "0.8.x",
     "doccoh": "*"
   },
   "private": false,
   "scripts": {
     "dist": "node dist; node_modules/.bin/doccoh src/package.js"
   },
-  "version": "0.0.2"
+  "version": "0.0.3"
 }
