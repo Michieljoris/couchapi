@@ -152,7 +152,8 @@ var exports = {
             {
                 id: 'jsBlock',
                 files: [
-                    // 'bower/jquery/dist/jquery.js'
+                    'bower/jquery/dist/jquery.js',
+                    'bower/pouchdb/dist/pouchdb-nightly.js'
                     //,'bower/bootstrap/dist/js/bootstrap.js'
                     // ,'bower/foundation/js/foundation.js'
                     // ,'bower/angular/angular.js'
@@ -166,14 +167,15 @@ var exports = {
                     //,'vendor/jquery-1.6.2.min.js'
                     // 'vendor/jquery-1.8.3.min.js'
                     //,'vendor/jquery-1.9.1.min.js'
-                    ,'vendor/jquery-1.9.1.min.js'
+                    // ,'vendor/jquery-1.9.1.min.js'
                     
                     ,'vendor/vow.js'
                     
                     // ,'router'
                     // ,'angular.js'
                     // ,'test.coffee'
-                    ,'jquery.couch.js',
+                    ,'couchapi_async.js',
+                    ,'couchapi_pouch.js',
                     'couchapi.js'
                     ,'main.js'    
                 ],

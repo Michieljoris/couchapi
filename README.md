@@ -15,24 +15,26 @@ Works both in the browser and on nodejs (well I hope, needs testing).
 I hope to add compatibility with PouchDB as well so that if you have an app that
 mainly talks to CouchDB it is nice to have a light weight adapter in the
 combination of couchapi and jquery.couch.js. But if you want to add
-functionality for using the browser's internal indexedb you just add pouchdb.js
-to your site and set the parameter on couchapi, withouth changing any code of
-your app.
+functionality for using the browser's internal indexedb just add pouchdb.js to
+your site and initialize couchapi without an url. Same goes for using couchapi
+on nodejs, pouchdb is already added as a dependency though. Your code can stay
+the same.
 
 In the browser copy the following files from the lib directory to your script
 directory, and add the appropriate script tags to your html file:
 
 	jquery.js
 	vow.js
-	jquery.couch.js
-	couchapi.js
-	
-If you want to access PouchDB managed internal browser databases also add:
+	couchapi.js //adds the vowed api to the global couchapi
+	couchapi_async.js  //attaches _async to couchapi 
+	 
+If you want to access PouchDB managed internal browser databases instead or
+also, add the script tags for:
 
-    pouchdb.js
-	pouchdb-adapter.js
+    pouchdb.js 
+	pouchdb-adapter.js //attaches _pouch to couchapi
 
-You will have a global named `couchapi` (and `VOW` as well);
+You will have a global named `couchapi` (and `VOW` as well).
 
 On nodejs 
 
@@ -46,6 +48,10 @@ will fetch the nodejs versions of jquery and vow. The module can be required
 with:
 
     var couchapi = require('couchapi');
+	
+In both cases CouchDB can accessed through functions attached to `couchapi`. The
+async version of the api (jquery.couch.js) can still be accessed through
+`couchapi._async`. The pouch version through `couchapi._pouch`.
 		
 The promises implementation is the one from
 [Douglas Crockford](https://github.com/douglascrockford/monad/raw/master/vow.js). Simple
@@ -84,7 +90,16 @@ A good doc for the original jquery.couch.js version is
 [http://bradley-holt.com/2011/07/couchdb-jquery-plugin-reference/](http://bradley-holt.com/2011/07/couchdb-jquery-plugin-reference/)
 and
 [http://daleharvey.github.io/jquery.couch.js-docs/symbols/index.html](http://daleharvey.github.io/jquery.couch.js-docs/symbols/index.html)
-I've modified it slightly so it can be run in the browser as will as on nodejs
+I've modified it slightly so it can be run in the browser as will as on
+nodejs. Access it using `couchapi._async`.
+
+Pouchdb is an in browser database with CouchDB functionality. Using couchapi your
+application can be agnostic about what backend it is using: Pouchdb or
+Couchdb. Couchapi uses couchapi_async.js (jquery.couch.js from the CouchDB server
+installation) to connect to a CouchDB instance both on node and in the browser,
+and not the PouchDB api because it is more flexible, code is easier to
+understand (just a bunch of direct ajax requests) and a lot smaller than
+PouchDB. 
 
 A docco generated html help file can be found in the docs directory.
 

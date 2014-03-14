@@ -96,7 +96,8 @@ module.exports = {
         // "foundation": "~5.2.0",
         // "jquery-ui": "~1.10.4",
         // "normalize.css": "~3.0.0"
-        
+        'jquery': '*',
+        'pouchdb': '*'
     },
     // What dependencies are useful only for developers?
     // Installed when we `npm install` in our working directory, but not 

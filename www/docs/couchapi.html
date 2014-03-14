@@ -8,42 +8,51 @@ security objects and design documents.</p>
 <hr />             </td>             <td class="code">               <div class="highlight"><pre>
 </pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Make this script useable in multiple environments</p>             </td>             <td class="code">               <div class="highlight"><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(root, factory)</span> {</span>
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports === <span class="hljs-string">'object'</span>) {
-</pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>CommonJS</p>             </td>             <td class="code">               <div class="highlight"><pre>        module.exports = factory(<span class="hljs-built_in">require</span>(<span class="hljs-string">'./jquery.couch.js'</span>), <span class="hljs-built_in">require</span>(<span class="hljs-string">'dougs_vow'</span>));
+</pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>CommonJS</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="hljs-keyword">var</span> VOW = <span class="hljs-built_in">require</span>(<span class="hljs-string">'dougs_vow'</span>);
+        module.exports = factory({});
+        module.exports._async = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./couchapi_async.js'</span>)._async;
+        module.exports._pouch = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./couchapi_pouch.js'</span>)._pouch;
     } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">'function'</span>) {
-        <span class="hljs-keyword">if</span> (define.amd) 
-</pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>AMD</p>             </td>             <td class="code">               <div class="highlight"><pre>            define([], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-                <span class="hljs-keyword">return</span> (root.couchapi = factory($.couch, VOW));
+</pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>neither amd nor bootstrap is tested as of March/14</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="hljs-keyword">if</span> (define.amd) 
+</pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>AMD</p>             </td>             <td class="code">               <div class="highlight"><pre>            define([<span class="hljs-string">'lib/couchapi_async'</span>, <span class="hljs-string">'lib/couchapi_pouch'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(async, pouch)</span> {</span>
+                <span class="hljs-keyword">return</span> factory({ _async: async._async, _pouch: pouch._pouch });
             });
         <span class="hljs-keyword">else</span>
-</pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p><a href="//github.com/michieljoris/bootstrapjs">bootstrapjs</a></p>             </td>             <td class="code">               <div class="highlight"><pre>            define({inject: [], factory: factory($.couch, VOW) });
+</pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p><a href="//github.com/michieljoris/bootstrapjs">bootstrapjs</a></p>             </td>             <td class="code">               <div class="highlight"><pre>            define({ inject: [<span class="hljs-string">'lib/couchapi_async'</span>, <span class="hljs-string">'lib/couchapi_pouch'</span>],
+                     factory: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(async, pouch)</span> {</span>
+                       <span class="hljs-keyword">return</span> factory({ _async: async._async, _pouch: pouch._pouch });
+                     }});
       
     } <span class="hljs-keyword">else</span> {
-</pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>Global variable</p>             </td>             <td class="code">               <div class="highlight"><pre>        root.couchapi = factory($.couch, VOW);
+</pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>Global variable</p>             </td>             <td class="code">               <div class="highlight"><pre>        root.couchapi = factory(root.couchapi || {});
     }
-}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(couch_async, VOW)</span> 
-  {</span> <span class="hljs-string">"use strict"</span>;
-</pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h1>API</h1>
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">factory</span><span class="hljs-params">(api)</span> {</span>
+<span class="hljs-pi">    "use strict"</span>;
+</pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h1>API</h1>
 
-<h2>Couchdb</h2>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="hljs-keyword">var</span> api = {
-        pouchapi : {},
-        couch: {}
-    };
+<h2>Couchdb</h2>
+
+<p>var api = {
+<em>async: { ... } //attached by couchapi</em>async.js
+<em>pouch: { .... } //attached by pouch</em>adapter.js
+};</p>             </td>             <td class="code">               <div class="highlight"><pre>    
     <span class="hljs-keyword">var</span> dbName;
-    <span class="hljs-keyword">var</span> couch = couch_async;
+    <span class="hljs-keyword">var</span> couch;
         
-    <span class="hljs-keyword">var</span> defaultDesignDocName = <span class="hljs-string">'auth'</span>;
-</pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h3>init</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h3>init</h3>
 
-<p>Set the default address of the couchdb server, and default desing document name</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.init = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url, aDefaultDesignDocName)</span> {</span>
+<p>Couchapi will try use couchapi_async is present and url is passed
+in. Otherwise will fall back to pouch.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.init = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url)</span> {</span>
+        couch = (api._async &amp;&amp; url) ? api._async : api._pouch;
+        <span class="hljs-keyword">if</span> (!couch)
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'couchapi can\'t talk to a database. Either load couchapi_async or couchapi_pouch, or both'</span>);
         couch.urlPrefix = url;
-        defaultDesignDocName = aDefaultDesignDocName || defaultDesignDocName;
+        api.info().when(
+            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>console.log(data); },
+            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span> {</span> console.log(err); }
+        );
     };
-</pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h3>withCredentials</h3>
-
-<p>Boolean flag added to xhr requests to couchdb</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.withCredentials = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(withCred)</span> {</span>
-        couch.withCredentials(withCred); 
-    };
-
+    
 </pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <p>Probably need to fiddle with the error reporting a bit more to get it
 working well for all broken vows.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">vowerify</span><span class="hljs-params">(options)</span> {</span>
         <span class="hljs-keyword">var</span> vow = VOW.make();
@@ -191,8 +200,8 @@ responseText</p>             </td>             <td class="code">               <
         <span class="hljs-keyword">var</span> vowed = vowerify(); 
         <span class="hljs-keyword">if</span> (roles) {
             api.userUpdate(name, {roles:roles}).when(
-               vowed.options.success,
-               vowed.options.error
+                vowed.options.success,
+                vowed.options.error
             );
         }
         <span class="hljs-keyword">else</span> api.userGet(name).when(
@@ -335,8 +344,9 @@ returned.</p>             </td>             <td class="code">               <div
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-42">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-42">&#182;</a>               </div>               <h3>dbDesign</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
-</pre></div>             </td>           </tr>                               <tr id="section-43">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-43">&#182;</a>               </div>               <ul>
+</pre></div>             </td>           </tr>                               <tr id="section-42">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-42">&#182;</a>               </div>               <h3>dbDesign</h3>
+
+<ul>
 <li>Set <em>group</em> to create object to hold <em>functionName</em></li>
 <li>Set <em>functionString</em> to null to remove the function from the group</li>
 <li>Set <em>functionString</em> to ? to get the content of function named <em>functionName</em></li>
@@ -377,14 +387,7 @@ returned.</p>             </td>             <td class="code">               <div
             
     };
         
-        
-</pre></div>             </td>           </tr>                               <tr id="section-44">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-44">&#182;</a>               </div>               <h3>dbDesignDoc</h3>
-
-<p>Set or get the a function in the default design document</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbDesignDoc = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(group, funName, funStr, aDbName)</span> {</span>
-        <span class="hljs-keyword">return</span> api.dbDesign(defaultDesignDocName, group, funName, funStr, aDbName);
-    };
-
-</pre></div>             </td>           </tr>                               <tr id="section-45">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-45">&#182;</a>               </div>               <h3>dbFilter</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-43">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-43">&#182;</a>               </div>               <h3>dbFilter</h3>
 
 <p>Set or get the a filter in the default design document</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbFilter = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(filterName, funStr, aDbName)</span> {</span>
         <span class="hljs-keyword">return</span> api.dbDesignDoc(<span class="hljs-string">'filters'</span>, filterName, funStr, aDbName);
@@ -441,8 +444,8 @@ returned.</p>             </td>             <td class="code">               <div
         <span class="hljs-keyword">return</span> vow.promise;
     }
 
-</pre></div>             </td>           </tr>                               <tr id="section-46">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-46">&#182;</a>               </div>               <h3>dbConflicts</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
-</pre></div>             </td>           </tr>                               <tr id="section-47">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-47">&#182;</a>               </div>               <p>Check for conflicts in a document. If fetchDocs is true not just the ids
+</pre></div>             </td>           </tr>                               <tr id="section-44">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-44">&#182;</a>               </div>               <h3>dbConflicts</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-45">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-45">&#182;</a>               </div>               <p>Check for conflicts in a document. If fetchDocs is true not just the ids
 are returned but also the docs themselves</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbConflicts = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(fetchDocs, aDbName)</span> {</span>
         <span class="hljs-keyword">var</span> vowed = vowerify();
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> fetchDocs !== <span class="hljs-string">'boolean'</span>) {
@@ -468,10 +471,10 @@ are returned but also the docs themselves</p>             </td>             <td 
         <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-48">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-48">&#182;</a>               </div>               <h2>Docs</h2>
+</pre></div>             </td>           </tr>                               <tr id="section-46">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-46">&#182;</a>               </div>               <h2>Docs</h2>
 
 <h3>docGet</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
-</pre></div>             </td>           </tr>                               <tr id="section-49">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-49">&#182;</a>               </div>               <p>Returns the specified doc from the specified db.The parameter options is
+</pre></div>             </td>           </tr>                               <tr id="section-47">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-47">&#182;</a>               </div>               <p>Returns the specified doc from the specified db.The parameter options is
 optional and can contain key value query params for instance:
 <code>{ open_revs: all rev: asdfasf4333 conflicts: true }</code></p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docGet = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, options, aDbName)</span> {</span>
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">'object'</span>) {
@@ -480,12 +483,12 @@ optional and can contain key value query params for instance:
         }
         <span class="hljs-keyword">var</span> vowed = vowerify(options); 
         options.error = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span> {</span>
-                vowed.options.error(<span class="hljs-literal">null</span>, err, <span class="hljs-string">"Failed to get document with id "</span> + id ); };
+            vowed.options.error(<span class="hljs-literal">null</span>, err, <span class="hljs-string">"Failed to get document with id "</span> + id ); };
         couch.db(aDbName || dbName).openDoc(id, options);
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-50">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-50">&#182;</a>               </div>               <h3>docConflicts</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-48">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-48">&#182;</a>               </div>               <h3>docConflicts</h3>
 
 <p>Implemention of <a href="http://wiki.apache.org/couchdb/Replication_and_conflicts">http://wiki.apache.org/couchdb/Replication<em>and</em>conflicts</a></p>
 
@@ -543,7 +546,7 @@ the other revs.</li>
         <span class="hljs-attribute">return</span> <span class="hljs-attribute">vowed.promise</span>;
     };
 
-</span></span></pre></div>             </td>           </tr>                               <tr id="section-51">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-51">&#182;</a>               </div>               <h3>docResolveConflicts</h3>
+</span></span></pre></div>             </td>           </tr>                               <tr id="section-49">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-49">&#182;</a>               </div>               <h3>docResolveConflicts</h3>
 
 <p>Pass in a doc or id you suspect has conflicts.
 Resolver is called to decide between conflicting revs.
@@ -599,8 +602,8 @@ is returned of good things achieved..</p>             </td>             <td clas
         <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-52">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-52">&#182;</a>               </div>               <h3>docRemove</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
-</pre></div>             </td>           </tr>                               <tr id="section-53">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-53">&#182;</a>               </div>               <p>Remove a document from a database. You either pass in the document's id or
+</pre></div>             </td>           </tr>                               <tr id="section-50">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-50">&#182;</a>               </div>               <h3>docRemove</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-51">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-51">&#182;</a>               </div>               <p>Remove a document from a database. You either pass in the document's id or
 the document itself.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(doc, aDbName)</span> {</span>
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> doc === <span class="hljs-string">'string'</span>)
             <span class="hljs-keyword">return</span> api.docRemoveById(doc, aDbName);
@@ -623,7 +626,7 @@ the document itself.</p>             </td>             <td class="code">        
         <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-54">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-54">&#182;</a>               </div>               <h3>docBulkremove</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-52">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-52">&#182;</a>               </div>               <h3>docBulkremove</h3>
 
 <p>Remove a set of documents</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docBulkRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(docs, aDbName)</span> {</span>
         <span class="hljs-keyword">var</span> vowed = vowerify(); 
@@ -631,7 +634,7 @@ the document itself.</p>             </td>             <td class="code">        
         <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-55">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-55">&#182;</a>               </div>               <h3>docBulkSave</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-53">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-53">&#182;</a>               </div>               <h3>docBulkSave</h3>
 
 <p>Save a list of documents</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docBulkSave = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(docs, aDbName)</span> {</span>
         <span class="hljs-keyword">var</span> vowed = vowerify(); 
@@ -639,8 +642,8 @@ the document itself.</p>             </td>             <td class="code">        
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-56">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-56">&#182;</a>               </div>               <h3>docAllInclude</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
-</pre></div>             </td>           </tr>                               <tr id="section-57">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-57">&#182;</a>               </div>               <p>Return a list of all docs in a database, including their contents. You can
+</pre></div>             </td>           </tr>                               <tr id="section-54">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-54">&#182;</a>               </div>               <h3>docAllInclude</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-55">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-55">&#182;</a>               </div>               <p>Return a list of all docs in a database, including their contents. You can
 specify an array of keys to fetch.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docAllInclude= <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(keys, aDbName)</span> {</span>
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> keys == <span class="hljs-string">'string'</span>) {
             aDbName = keys;   
@@ -652,8 +655,8 @@ specify an array of keys to fetch.</p>             </td>             <td class="
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-58">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-58">&#182;</a>               </div>               <h3>docAll</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
-</pre></div>             </td>           </tr>                               <tr id="section-59">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-59">&#182;</a>               </div>               <p>Fetch all the docs in this database, you can specify an array of keys to
+</pre></div>             </td>           </tr>                               <tr id="section-56">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-56">&#182;</a>               </div>               <h3>docAll</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-57">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-57">&#182;</a>               </div>               <p>Fetch all the docs in this database, you can specify an array of keys to
 fetch. No contents</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docAll= <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(keys, aDbName)</span> {</span>
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> keys == <span class="hljs-string">'string'</span>) {
             aDbName = keys;   
@@ -665,7 +668,7 @@ fetch. No contents</p>             </td>             <td class="code">          
         <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-60">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-60">&#182;</a>               </div>               <h3>docAllDesignInclude</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-58">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-58">&#182;</a>               </div>               <h3>docAllDesignInclude</h3>
 
 <p>Return a list of all design docs in a database, including their contents</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docAllDesignInclude = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
         <span class="hljs-keyword">var</span> vowed = vowerify({ <span class="hljs-string">"include_docs"</span>: <span class="hljs-literal">true</span> }); 
@@ -673,7 +676,7 @@ fetch. No contents</p>             </td>             <td class="code">          
         <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-61">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-61">&#182;</a>               </div>               <h3>docAllDesign</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-59">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-59">&#182;</a>               </div>               <h3>docAllDesign</h3>
 
 <p>Fetch all the design docs, no contents</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docAllDesign= <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
         <span class="hljs-keyword">var</span> vowed = vowerify(); 
@@ -681,11 +684,11 @@ fetch. No contents</p>             </td>             <td class="code">          
         <span class="hljs-keyword">return</span> vowed.promise;
     };
     
-</pre></div>             </td>           </tr>                               <tr id="section-62">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-62">&#182;</a>               </div>               <h3>docCopy</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-60">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-60">&#182;</a>               </div>               <h3>docCopy</h3>
 
 <p>The COPY command (which is non-standard HTTP) copies an existing
 document to a new or existing document.</p>             </td>             <td class="code">               <div class="highlight"><pre>        
-</pre></div>             </td>           </tr>                               <tr id="section-63">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-63">&#182;</a>               </div>               <p>Not working under cors at least: XMLHttpRequest cannot load
+</pre></div>             </td>           </tr>                               <tr id="section-61">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-61">&#182;</a>               </div>               <p>Not working under cors at least: XMLHttpRequest cannot load
 http://localhost:5984/b/asdfasf. Method COPY is not allowed
 by Access-Control-Allow-Methods.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docCopy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, newId, aDbName)</span> {</span>
         <span class="hljs-keyword">var</span> vowed = vowerify(); 
@@ -697,7 +700,7 @@ by Access-Control-Allow-Methods.</p>             </td>             <td class="co
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-64">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-64">&#182;</a>               </div>               <h3>docSave</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-62">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-62">&#182;</a>               </div>               <h3>docSave</h3>
 
 <p>Create a new document in the specified database, using the supplied
 JSON document structure. If the JSON structure includes the _id
@@ -709,10 +712,10 @@ generated.</p>             </td>             <td class="code">               <di
         <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-65">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-65">&#182;</a>               </div>               <h2>Views</h2>
+</pre></div>             </td>           </tr>                               <tr id="section-63">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-63">&#182;</a>               </div>               <h2>Views</h2>
 
 <h3>viewCompact</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
-</pre></div>             </td>           </tr>                               <tr id="section-66">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-66">&#182;</a>               </div>               <p>Compacts the view indexes associated with the specified design
+</pre></div>             </td>           </tr>                               <tr id="section-64">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-64">&#182;</a>               </div>               <p>Compacts the view indexes associated with the specified design
 document. You can use this in place of the full database compaction if
 you know a specific set of view indexes have been affected by a recent
 database change.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewCompact = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
@@ -721,7 +724,7 @@ database change.</p>             </td>             <td class="code">            
         <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-67">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-67">&#182;</a>               </div>               <h3>viewCleanup</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-65">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-65">&#182;</a>               </div>               <h3>viewCleanup</h3>
 
 <p>Cleans up the cached view output on disk for a given view.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewCleanup = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
         <span class="hljs-keyword">var</span> vowed = vowerify(); 
@@ -729,8 +732,8 @@ database change.</p>             </td>             <td class="code">            
         <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-68">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-68">&#182;</a>               </div>               <h3>viewGet</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
-</pre></div>             </td>           </tr>                               <tr id="section-69">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-69">&#182;</a>               </div>               <p>Executes the specified view-name from the specified design-doc design
+</pre></div>             </td>           </tr>                               <tr id="section-66">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-66">&#182;</a>               </div>               <h3>viewGet</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-67">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-67">&#182;</a>               </div>               <p>Executes the specified view-name from the specified design-doc design
 document, you can specify a list of <code>keys</code> in the options
 object to recieve only those keys.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewGet = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(designDoc, viewName, keys, aDbName)</span> {</span>
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> keys === <span class="hljs-string">'string'</span>) {
@@ -744,7 +747,7 @@ object to recieve only those keys.</p>             </td>             <td class="
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-70">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-70">&#182;</a>               </div>               <h3>viewTemp</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-68">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-68">&#182;</a>               </div>               <h3>viewTemp</h3>
 
 <p>Creates (and executes) a temporary view based on the view function
 supplied in the map paramater, either as string or function object.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewTemp = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(map, aDbName)</span> {</span>
@@ -753,7 +756,7 @@ supplied in the map paramater, either as string or function object.</p>         
         <span class="hljs-keyword">return</span> vowed.promise;
     };
     
-</pre></div>             </td>           </tr>                               <tr id="section-71">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-71">&#182;</a>               </div>               <h2>Replications</h2>
+</pre></div>             </td>           </tr>                               <tr id="section-69">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-69">&#182;</a>               </div>               <h2>Replications</h2>
 
 <h3>replicateStop</h3>
 
@@ -767,7 +770,7 @@ Not tested yet</p>             </td>             <td class="code">              
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-72">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-72">&#182;</a>               </div>               <h3>replicateDo</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-70">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-70">&#182;</a>               </div>               <h3>replicateDo</h3>
 
 <p>Set up a replication</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicateDo = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(db1, db2, repOptions)</span> {</span>
         <span class="hljs-keyword">var</span> vowed = vowerify(); 
@@ -775,25 +778,25 @@ Not tested yet</p>             </td>             <td class="code">              
         <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-73">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-73">&#182;</a>               </div>               <h3>replicationAdd</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-71">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-71">&#182;</a>               </div>               <h3>replicationAdd</h3>
 
 <p>Add a replication to the replicator database. repDoc can have the following keys:
-"source", "target", "create<em>target", "continuous", "doc</em>ids", "filter", "query<em>params", "user</em>ctx"</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicationAdd = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, repDoc)</span> {</span>
+"source", "target", "create<em>target", "continuous", "doc</em>ids", "filter", "query<em>params", "user</em>ctx"</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicationAdd = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, repDoc, sourceDesignDoc)</span> {</span>
         repDoc._id = id || api.UUID();
         <span class="hljs-keyword">if</span> (repDoc.role)
             repDoc.user_ctx = { <span class="hljs-string">"roles"</span>: [repDoc.role] };
         <span class="hljs-keyword">if</span> (repDoc.filterName)
-            repDoc.filter = defaultDesignDocName + <span class="hljs-string">'/'</span> + repDoc.filterName;
+            repDoc.filter = sourceDesignDoc + <span class="hljs-string">'/'</span> + repDoc.filterName;
         <span class="hljs-keyword">return</span> api.docSave(repDoc, <span class="hljs-string">'_replicator'</span>);
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-74">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-74">&#182;</a>               </div>               <h3>replicationRemove</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-72">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-72">&#182;</a>               </div>               <h3>replicationRemove</h3>
 
 <p>Remove a replication by removing the document from the replicator databasee</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicationRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id)</span> {</span>
         <span class="hljs-keyword">return</span> api.docRemove(id, <span class="hljs-string">'_replicator'</span>);
     }; 
         
-</pre></div>             </td>           </tr>                               <tr id="section-75">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-75">&#182;</a>               </div>               <h2>Miscellaneous</h2>
+</pre></div>             </td>           </tr>                               <tr id="section-73">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-73">&#182;</a>               </div>               <h2>Miscellaneous</h2>
 
 <h3>listView</h3>
 
@@ -810,7 +813,7 @@ keys in the options object to recieve only those keys.</p>             </td>    
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-76">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-76">&#182;</a>               </div>               <h3>taskActive</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-74">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-74">&#182;</a>               </div>               <h3>taskActive</h3>
 
 <p>You can obtain a list of active tasks by using the /<em>active</em>tasks URL.
 The result is a JSON array of the currently running tasks, with each task
@@ -820,7 +823,13 @@ being described with a single object.</p>             </td>             <td clas
         <span class="hljs-keyword">return</span> vowed.promise;
     };
     
-</pre></div>             </td>           </tr>                               <tr id="section-77">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-77">&#182;</a>               </div>               <h3>uuid</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-75">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-75">&#182;</a>               </div>               <h3>withCredentials</h3>
+
+<p>Boolean flag added to xhr requests to couchdb</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.withCredentials = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(withCred)</span> {</span>
+        couch.withCredentials(withCred); 
+    };
+    
+</pre></div>             </td>           </tr>                               <tr id="section-76">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-76">&#182;</a>               </div>               <h3>uuid</h3>
 
 <p>Fetch a new UUID. If <code>batchSize</code> is defined a number of uuids are fetched
 at once and cached</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.uuid = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(batchSize)</span> {</span>
@@ -831,27 +840,27 @@ at once and cached</p>             </td>             <td class="code">          
         <span class="hljs-keyword">return</span> vow.promise;
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-78">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-78">&#182;</a>               </div>               <h3>test</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-77">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-77">&#182;</a>               </div>               <h3>test</h3>
 
 <p>Test function for all of the above.</p>
 
 <p>Pass in the name of the api function as the first argument, and the
 arguments for the function as the rest of the arguments. The promise will
 resolved and result printed out togehter with returned data or error</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.test = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span> api[<span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]].apply(api,
-    <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">1</span>)).  when( <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-    console.log(<span class="hljs-string">"SUCCESS!!"</span>);
-                    console.log(data);
-                },
-                <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                    console.log(<span class="hljs-string">'FAIL'</span>);
-                    console.log(data);
-                }
-            );
-        <span class="hljs-keyword">return</span> <span class="hljs-string">'Wait for it...'</span>;
-    };
+                                                    <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">1</span>)).  when( <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+                                                        console.log(<span class="hljs-string">"SUCCESS!!"</span>);
+                                                        console.log(data);
+                                                    },
+                                                                                                      <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+                                                                                                          console.log(<span class="hljs-string">'FAIL'</span>);
+                                                                                                          console.log(data);
+                                                                                                      }
+                                                                                                    );
+                            <span class="hljs-keyword">return</span> <span class="hljs-string">'Wait for it...'</span>;
+                          };
 
     <span class="hljs-keyword">return</span> api;
-  }));
+}));
 
 
 </pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
