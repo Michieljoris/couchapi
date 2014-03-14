@@ -7,9 +7,17 @@ Some functionality is missing, attachments, show and list views etc. Wrote it
 for my own use. As I need more features I might add them.
 
 Since we're using node-jquery for an easy port of couchapi to node the
-xmlhttprequest is not supporting sessions at the moment. I hope to fix that.
+xmlhttprequest is not supporting sessions at the moment on nodejs. I hope to fix
+that. Hope to factor out the jquery dependency as well.
 
 Works both in the browser and on nodejs (well I hope, needs testing).
+
+I hope to add compatibility with PouchDB as well so that if you have an app that
+mainly talks to CouchDB it is nice to have a light weight adapter in the
+combination of couchapi and jquery.couch.js. But if you want to add
+functionality for using the browser's internal indexedb you just add pouchdb.js
+to your site and set the parameter on couchapi, withouth changing any code of
+your app.
 
 In the browser copy the following files from the lib directory to your script
 directory, and add the appropriate script tags to your html file:
@@ -18,6 +26,11 @@ directory, and add the appropriate script tags to your html file:
 	vow.js
 	jquery.couch.js
 	couchapi.js
+	
+If you want to access PouchDB managed internal browser databases also add:
+
+    pouchdb.js
+	pouchdb-adapter.js
 
 You will have a global named `couchapi` (and `VOW` as well);
 
@@ -68,16 +81,11 @@ Not quite sure yet whether that is a good thing or
 not. [http://localhost:5984/_utils/docs/api/database.html?highlight=bulk#post-db-bulk-docs](http://localhost:5984/_utils/docs/api/database.html?highlight=bulk#post-db-bulk-docs)
 
 A good doc for the original jquery.couch.js version is
-[http://bradley-holt.com/2011/07/couchdb-jquery-plugin-reference/](http://bradley-holt.com/2011/07/couchdb-jquery-plugin-reference/) and
+[http://bradley-holt.com/2011/07/couchdb-jquery-plugin-reference/](http://bradley-holt.com/2011/07/couchdb-jquery-plugin-reference/)
+and
 [http://daleharvey.github.io/jquery.couch.js-docs/symbols/index.html](http://daleharvey.github.io/jquery.couch.js-docs/symbols/index.html)
-
 I've modified it slightly so it can be run in the browser as will as on nodejs
 
----------------------------
+A docco generated html help file can be found in the docs directory.
 
-An idea is to adapt it so it can be used with pouchdb as well, just by setting a parameter.
-
-If you have an app that mainly talks to CouchDB it is nice to have a light weight adapter in the combination of couchapi and jquery.couch.js.
-
-But if you want to add functionality for using the browser's internal indexedb you just add pouchdb.js to your site and set the parameter on couchapi, withouth changing any code of your app.
 

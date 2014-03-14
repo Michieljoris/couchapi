@@ -7,3 +7,19 @@ http://stackoverflow.com/questions/14892095/browser-msie-error-after-update-to-j
 
 TODO
 * fix up package.json script property, should run docco(h)
+* factor out jquery dependency, which means:
+Extracting relevant jquery code , possibly using xmlhttprequest on node, 
+Maybe use zeptojs.com for util function.
+* session support for node version
+  http://codetwizzle.com/articles/couchdb-cookie-authentication-nodejs-nano/
+  https://www.npmjs.org/package/nano
+* attachments
+* batching requests?
+ This object will internally keep track of revisions it's seen before and
+ batches http requests that happen in the same "tick" to go out at the same time
+ using CouchDB's batch processing APIs.
+ https://github.com/creationix/couch-client
+* incorporate reliable changes lib
+https://github.com/iriscouch/follow
+* streaming of attachments
+See https://github.com/flatiron/cradle
