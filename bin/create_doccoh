@@ -1,2 +1,2 @@
 #!/bin/sh
-node_modules/doccoh/bin/doccoh lib/couchapi.js -o ./www/docs -c ./www/docs/custom.css
+node_modules/doccoh/bin/doccoh lib/couchapi.js -o ./docs -c ./www/docs/custom.css

@@ -1,171 +1,314 @@
-<!DOCTYPE html>  <html> <head>   <title>couchapi.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               couchapi.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h2>A simple vows based wrapper for jquery.couch.js.</h2>             </td>             <td class="code">               <div class="highlight"><pre>
-</pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>It is mirroring almost all functionality of the jquery javascript adapter that
-comes with futon, but the functions are returning vows instead of expecting
-success and error callbacks passed in.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+<!DOCTYPE html>  <html> <head>   <title>couchapi.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="custom.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               couchapi.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <p>A simple vows based wrapper for couchapi_async.js, which is a modified
+jquery.couch.js, the jquery javascript adapter that comes with futon.</p>             </td>             <td class="code">               <div class="highlight"><pre>
+</pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>It is mirroring almost all functionality but the functions are returning vows
+instead of expecting success and error callbacks passed in.</p>             </td>             <td class="code">               <div class="highlight"><pre>
 </pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>I added a few more utility functions mainly to easily configure and modify
 security objects and design documents.</p>
 
 <hr />             </td>             <td class="code">               <div class="highlight"><pre>
 </pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Make this script useable in multiple environments</p>             </td>             <td class="code">               <div class="highlight"><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(root, factory)</span> {</span>
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports === <span class="hljs-string">'object'</span>) {
-</pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>CommonJS</p>             </td>             <td class="code">               <div class="highlight"><pre>    module.exports = factory();
-  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">'function'</span>) {
-      <span class="hljs-keyword">if</span> (define.amd) 
-</pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>AMD</p>             </td>             <td class="code">               <div class="highlight"><pre>          define([], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(b)</span> {</span>
-              <span class="hljs-keyword">return</span> (root.returnExportsGlobal = factory(b));
-          });
-      <span class="hljs-keyword">else</span>
-</pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p><a href="//github.com/michieljoris/bootstrapjs">bootstrapjs</a></p>             </td>             <td class="code">               <div class="highlight"><pre>          define({inject: [], factory: factory() });
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports === <span class="hljs-string">'object'</span>) {
+</pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>CommonJS</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="hljs-keyword">var</span> VOW = <span class="hljs-built_in">require</span>(<span class="hljs-string">'dougs_vow'</span>);
+        module.exports = factory({});
+        module.exports._async = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./couchapi_async.js'</span>)._async;
+        module.exports._pouch = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./couchapi_pouch.js'</span>)._pouch;
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">'function'</span>) {
+</pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>neither amd nor bootstrap is tested as of March/14</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="hljs-keyword">if</span> (define.amd) 
+</pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>AMD</p>             </td>             <td class="code">               <div class="highlight"><pre>            define([<span class="hljs-string">'lib/couchapi_async'</span>, <span class="hljs-string">'lib/couchapi_pouch'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(async, pouch)</span> {</span>
+                <span class="hljs-keyword">return</span> factory({ _async: async._async, _pouch: pouch._pouch });
+            });
+        <span class="hljs-keyword">else</span>
+</pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p><a href="//github.com/michieljoris/bootstrapjs">bootstrapjs</a></p>             </td>             <td class="code">               <div class="highlight"><pre>            define({ inject: [<span class="hljs-string">'lib/couchapi_async'</span>, <span class="hljs-string">'lib/couchapi_pouch'</span>],
+                     factory: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(async, pouch)</span> {</span>
+                       <span class="hljs-keyword">return</span> factory({ _async: async._async, _pouch: pouch._pouch });
+                     }});
       
-  } <span class="hljs-keyword">else</span> {
-</pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p>Global variable</p>             </td>             <td class="code">               <div class="highlight"><pre>    root.couchapi = factory();
-  }
-}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> 
-  {</span> <span class="hljs-string">"use strict"</span>;
-    <span class="hljs-keyword">var</span> api = {};
-    <span class="hljs-keyword">var</span> defaultDesignDocName = <span class="hljs-string">'auth'</span>;
-        
-</pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h2>API</h2>
+    } <span class="hljs-keyword">else</span> {
+</pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>Global variable</p>             </td>             <td class="code">               <div class="highlight"><pre>        root.couchapi = factory(root.couchapi || {});
+    }
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">factory</span><span class="hljs-params">(api)</span> {</span>
+<span class="hljs-pi">    "use strict"</span>;
+</pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h1>API</h1>
 
-<h4>withCredentials</h4>             </td>             <td class="code">               <div class="highlight"><pre>    api.withCredentials = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(withCred)</span> {</span>
-        $.couch.withCredentials(withCred); 
-    };
+<h2>Couchdb</h2>
 
-</pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre>    api.init = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url, aDefaultDesignDocName)</span> {</span>
-        $.couch.urlPrefix = url;
-        defaultDesignDocName = aDefaultDesignDocName || defaultDesignDocName;
-    };
+<p>var api = {
+<em>async: { ... } //attached by couchapi</em>async.js
+<em>pouch: { .... } //attached by pouch</em>adapter.js
+};</p>             </td>             <td class="code">               <div class="highlight"><pre>    
+    <span class="hljs-keyword">var</span> dbName;
+    <span class="hljs-keyword">var</span> couch;
         
-        
-    api.config = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(section, option, value)</span>{</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.config({
-            success: vow.keep,
-            error: vow.break
-        },section, option, value);
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
+</pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h3>init</h3>
 
-    api.info = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.info({
-            success: vow.keep,
-            error: vow.break
+<p>Couchapi will try use couchapi_async is present and url is passed
+in. Otherwise will fall back to pouch.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.init = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url, verbose)</span> {</span>
+        couch = (api._async &amp;&amp; url) ? api._async : api._pouch;
+        <span class="hljs-keyword">if</span> (!couch)
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'couchapi can\'t talk to a database. Either load couchapi_async or couchapi_pouch, or both'</span>);
+        couch.urlPrefix = url;
+        <span class="hljs-keyword">if</span> (verbose === <span class="hljs-string">'verbose'</span> || url === <span class="hljs-string">'verbose'</span> )
+            api.info().when(
+                <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>console.log(data); },
+                <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span> {</span> console.log(err); }
+            );
+    };
+    
+</pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <p>Probably need to fiddle with the error reporting a bit more to get it
+working well for all broken vows.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">vowerify</span><span class="hljs-params">(options)</span> {</span>
+        <span class="hljs-keyword">var</span> vow = VOW.make();
+        options = options || {};
+        options.success = vow.keep;
+        options.error = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(status, error, reason)</span> {</span>
+            vow.break({
+                status: status &amp;&amp; status.status ? status.status : status,
+                reason: <span class="hljs-keyword">typeof</span> reason === <span class="hljs-string">'string'</span> ?
+                    reason : (status &amp;&amp; status.reason ? status.reason : error)
+            });   
+        };
+        <span class="hljs-keyword">return</span> { promise: vow.promise, options: options };
+    }
+        
+</pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <h3>config</h3>
+
+<p>View and edit the CouchDB configuration, called with just the options
+parameter the entire config is returned, you can be more specific by
+passing the section and option parameters, if you specify a value that
+value will be stored in the configuration.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.config = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(section, option, value)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.config(vowed.options, section, option, value);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+</pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h3>info</h3>
+
+<p>Accessing the root of a CouchDB instance returns meta information about
+the instance. The response is a JSON structure containing information
+about the server, including a welcome message and the version of the
+server.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.info = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span>{</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify();
+        couch.info(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    }; 
+    
+</pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <h3>log</h3>
+
+<p>Retrieve the couchdb log</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.log = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(bytes, offset)</span> {</span>
+        <span class="hljs-keyword">var</span> vow = VOW.make();
+        couch.log({
+</pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <p>never gonna happen.. </p>             </td>             <td class="code">               <div class="highlight"><pre>            success: vow.keep,
+</pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <p>jquery.couch.js tries to parse the result, but it is not a json</p>             </td>             <td class="code">               <div class="highlight"><pre>            error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(status, req)</span> {</span>
+</pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <p>luckily we can check the status and still return the
+responseText</p>             </td>             <td class="code">               <div class="highlight"><pre>                <span class="hljs-keyword">if</span> (status === <span class="hljs-number">200</span>) vow.keep(req.responseText);
+                <span class="hljs-keyword">else</span> vow.break({ status: status, reason: req});
+            },
+            bytes:bytes || <span class="hljs-number">1000</span> , offset:offset || <span class="hljs-number">0</span>
         });
         <span class="hljs-keyword">return</span> vow.promise;
     };
         
-    api.log = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(bytes, offset)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.log({
-</pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <p>never gonna happen.. </p>             </td>             <td class="code">               <div class="highlight"><pre>            success: vow.keep,
-</pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <p>jquery.couch.js tries to parse the result, but it is not a json</p>             </td>             <td class="code">               <div class="highlight"><pre>            error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(status, req)</span> {</span>
-</pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <p>luckily we can check the status and still return the responseText</p>             </td>             <td class="code">               <div class="highlight"><pre>                <span class="hljs-keyword">if</span> (status === <span class="hljs-number">200</span>) vow.keep(req.responseText);
-                <span class="hljs-keyword">else</span> vow.break(status);
-            }
-            ,bytes:bytes || <span class="hljs-number">1000</span> , offset:offset || <span class="hljs-number">0</span>
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
+</pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <h2>Sessions</h2>
 
-        
-</pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h2>Sessions</h2>             </td>             <td class="code">               <div class="highlight"><pre>    api.login = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, pwd)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.login({
+<h3>login</h3>
+
+<p>Authenticate against the couchdb _users database and create a session</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.login = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, pwd)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify({
             name: name,
             password: pwd,
-            withCredentials:<span class="hljs-literal">true</span>,
-            success: vow.keep,
-            error: vow.break
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
+            withCredentials:<span class="hljs-literal">true</span> });
+        couch.login(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    }; 
+    
+</pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <h3>logout</h3>
+
+<p>Delete your current CouchDB user session</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.logout = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify();
+        couch.logout(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+
+</pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <h3>session</h3>
+
+<p>Returns the session information for the currently logged in user.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.session = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify();
+        couch.session(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+    
+</pre></div>             </td>           </tr>                               <tr id="section-22">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-22">&#182;</a>               </div>               <h2>Users</h2>
+
+<h3>userAdd</h3>
+
+<p>Add a user to the <code>_user</code> database</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.userAdd = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, pwd, roles)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify();
+        <span class="hljs-keyword">var</span> userDoc = {
+            name: name,
+            roles: roles
+        };
+        couch.signup(userDoc, pwd, vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-    api.logout = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.logout({
-            success: vow.keep,
-            error: vow.break
+</pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>               <h3>userRemove</h3>
+
+<p>Remove a user from the <code>_user</code> database</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.userRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.userDb(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+            <span class="hljs-keyword">var</span> dbName = data.name;
+            api.docRemove(name, dbName).when(
+                vowed.options.success, vowed.options.error
+            );
         });
-        <span class="hljs-keyword">return</span> vow.promise;
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+    
+</pre></div>             </td>           </tr>                               <tr id="section-24">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-24">&#182;</a>               </div>               <h3>userGet</h3>
+
+<p>Get user document from <code>_user</code> database</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.userGet = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.userDb(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+            <span class="hljs-keyword">var</span> dbName = data.name;
+            couch.db(aDbName || dbName).openDoc(<span class="hljs-string">'org.couchdb.user:'</span> +name, vowed.options);
+        });
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+
+</pre></div>             </td>           </tr>                               <tr id="section-25">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-25">&#182;</a>               </div>               <h3>userUpdate</h3>
+
+<p>Update a user document in the <code>_user</code> database</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.userUpdate = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName, props)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.userDb(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+            <span class="hljs-keyword">var</span> dbName = data.name;
+            couch.db(aDbName || dbName).openDoc(<span class="hljs-string">'org.couchdb.user:'</span> + name, {
+                success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+                    <span class="hljs-built_in">Object</span>.keys(props).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(p)</span> {</span>
+                        data[p] = props[p]; 
+                    });
+                    couch.db(aDbName || dbName).saveDoc(data, vowed.options);
+                },
+                error: vowed.options.error
+            });
+        });
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+
+</pre></div>             </td>           </tr>                               <tr id="section-26">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-26">&#182;</a>               </div>               <h3>userRoles</h3>
+
+<p>Fetch or set the roles assigned to a user</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.userRoles = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, roles)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        <span class="hljs-keyword">if</span> (roles) {
+            api.userUpdate(name, {roles:roles}).when(
+                vowed.options.success,
+                vowed.options.error
+            );
+        }
+        <span class="hljs-keyword">else</span> api.userGet(name).when(
+            vowed.options.success,
+            vowed.options.error
+        );
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-    api.session = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.session({
-            success: vow.keep,
-            error: vow.break
+</pre></div>             </td>           </tr>                               <tr id="section-27">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-27">&#182;</a>               </div>               <h3>userRemoveRole</h3>
+
+<p>Remove a role from a user</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.userRemoveRole = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName, role)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.userDb(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+            <span class="hljs-keyword">var</span> dbName = data.name;
+            couch.db(aDbName || dbName).openDoc(<span class="hljs-string">'org.couchdb.user:'</span> + name, {
+                success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+                    <span class="hljs-keyword">if</span> (data.roles.indexOf(role) !== -<span class="hljs-number">1</span>) {
+                        data.roles = data.filter(
+                            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span>{</span> <span class="hljs-keyword">return</span> e !==role; });
+                        couch.db(aDbName || dbName).saveDoc(data, vowed.options);
+                    }
+                    <span class="hljs-keyword">else</span> vowed.options.succes(data);
+                        
+                },
+                error: vowed.options.error
+            });
         });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-        
-</pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <h2>Databases</h2>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbAll = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.allDbs({
-            success: vow.keep,
-            error: vow.break
+        <span class="hljs-keyword">return</span> vowed.promise;
+    }; 
+
+</pre></div>             </td>           </tr>                               <tr id="section-28">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-28">&#182;</a>               </div>               <h3>userAddRole</h3>
+
+<p>Add a role to a user</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.userAddRole = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName, role)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.userDb(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+            <span class="hljs-keyword">var</span> dbName = data.name;
+            couch.db(aDbName || dbName).openDoc(<span class="hljs-string">'org.couchdb.user:'</span> + name, {
+                success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+                    <span class="hljs-keyword">if</span> (data.roles.indexOf(role) === -<span class="hljs-number">1</span>) {
+                        data.roles.push(role);
+                        couch.db(aDbName || dbName).saveDoc(data, vowed.options);
+                    }
+                    <span class="hljs-keyword">else</span> vowed.options.success(data);
+                        
+                },
+                error: vowed.options.error
+            });
         });
-            
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
+        <span class="hljs-keyword">return</span> vowed.promise;
+    }; 
         
-        <span class="hljs-keyword">var</span> dbName;
-    api.dbSet = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
+</pre></div>             </td>           </tr>                               <tr id="section-29">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-29">&#182;</a>               </div>               <h2>Databases</h2>
+
+<h3>dbAll</h3>
+
+<p>Returns a list of all the databases in the CouchDB instance</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbAll = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.allDbs(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+
+</pre></div>             </td>           </tr>                               <tr id="section-30">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-30">&#182;</a>               </div>               <h3>dbUse</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-31">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-31">&#182;</a>               </div>               <p>Set the default database name, making the name parameter for subsequent
+database manipulation call optional</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbUse = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
         dbName = name;
+    }; 
+
+</pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <h3>dbRemove</h3>
+
+<p>Remove a database</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.db(name || dbName).drop(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
-        
-    api.dbRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
-        <span class="hljs-keyword">if</span> (name) dbName = name;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).drop({
-            success: vow.keep,
-            error: vow.break
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
+
+</pre></div>             </td>           </tr>                               <tr id="section-33">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-33">&#182;</a>               </div>               <h3>dbCreate</h3>
+
+<p>Create a new database named <em>name</em></p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbCreate = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.db(name || dbName).create(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    }; 
+
+</pre></div>             </td>           </tr>                               <tr id="section-34">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-34">&#182;</a>               </div>               <h3>dbCompact</h3>
+
+<p>Request compaction of the specified database.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbCompact = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.db(name || dbName).compact(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
-        
-    api.dbCreate = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
-        <span class="hljs-keyword">if</span> (name) dbName = name;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).create({
-            success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                console.log(<span class="hljs-string">'keeping promise, created database '</span> + name);
-                vow.keep(data);  
-            },
-            error: vow.break
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-        
-    api.dbCompact = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
-        <span class="hljs-keyword">if</span> (name) dbName = name;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).compact({
-            success: vow.keep,
-            error: vow.break
-        });
-            
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-</pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <p>call returned object.stop to finish receiving changes</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbChanges = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(cb, aDbName, options)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> changes = $.couch.db(dbName).changes(<span class="hljs-literal">null</span>, options);
+
+</pre></div>             </td>           </tr>                               <tr id="section-35">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-35">&#182;</a>               </div>               <h3>dbChanges</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-36">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-36">&#182;</a>               </div>               <p>The passed in <em>callback</em> will be called with the changes. Call returned
+object.stop to finish receiving changes.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbChanges = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(callback, since, aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> changes = couch.db(aDbName || dbName).changes(since, {});
         changes.onChange(
-            cb 
+            callback 
         );
         <span class="hljs-keyword">return</span> changes;
     };
         
-    api.dbInfo = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
-        <span class="hljs-keyword">if</span> (name) dbName = name;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).info({
+</pre></div>             </td>           </tr>                               <tr id="section-37">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-37">&#182;</a>               </div>               <h3>dbInfo</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-38">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-38">&#182;</a>               </div>               <p>Gets information about the specified database.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbInfo = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.db(name || dbName).info({
             success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                data.uri = $.couch.db(dbName).uri;
-                vow.keep(data);
+                data.uri = couch.db(name || dbName).uri;
+                vowed.options.success(data);
             },
             error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(status, reason)</span> {</span>
                 <span class="hljs-keyword">var</span> data = { status: status };
@@ -173,123 +316,199 @@ security objects and design documents.</p>
                 <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> reason === <span class="hljs-string">'string'</span>)
                     data.reason = reason;
                 <span class="hljs-keyword">else</span> data.reason = reason.responseText;
-                        
-                vow.break(data);   
+                vowed.options.error(data);           
             }
         });
-            
-        <span class="hljs-keyword">return</span> vow.promise;
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
-        
-    api.dbSecurity = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(securityObj, aDbName)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
+    
+</pre></div>             </td>           </tr>                               <tr id="section-39">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-39">&#182;</a>               </div>               <h3>dbExists</h3>
+
+<p>Alias for sake of ease of us</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbExists = api.dbInfo;
+    
+</pre></div>             </td>           </tr>                               <tr id="section-40">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-40">&#182;</a>               </div>               <h3>dbSecurity</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-41">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-41">&#182;</a>               </div>               <p>Set the security object of a database. If only one parameter is passed, or
+none, the security object for the specified or default database is
+returned.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbSecurity = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(securityObj, aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> securityObj === <span class="hljs-string">'object'</span>) {
-            <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-            $.couch.db(dbName).setDbProperty(<span class="hljs-string">'_security'</span>, securityObj, {
-                success: vow.keep,
-                error: vow.break
-            });
+            couch.db(aDbName || dbName).setDbProperty(<span class="hljs-string">'_security'</span>, securityObj, vowed.options);
                 
         }
         <span class="hljs-keyword">else</span>  {
             aDbName = securityObj;
-            <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-            $.couch.db(dbName).getDbProperty(<span class="hljs-string">'_security'</span>, {
-                success: vow.keep,
-                error: vow.break
-            });
-                
+            couch.db(aDbName || dbName).getDbProperty(<span class="hljs-string">'_security'</span>, vowed.options);
         }
-        <span class="hljs-keyword">return</span> vow.promise;
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
-        
-</pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <p>set group to create object to hold funName
-set funStr to null to delete it the key and value
-set funStr to ? to get the content of funName</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbDesign = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(docName, group, funName, funStr, aDbName)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make();
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
+
+</pre></div>             </td>           </tr>                               <tr id="section-42">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-42">&#182;</a>               </div>               <h3>dbDesign</h3>
+
+<ul>
+<li>Set <em>group</em> to create object to hold <em>functionName</em></li>
+<li>Set <em>functionString</em> to null to remove the function from the group</li>
+<li>Set <em>functionString</em> to ? to get the content of function named <em>functionName</em></li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbDesign = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(docName, group, functionName, functionString, aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify();
         <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">save</span><span class="hljs-params">(designDoc)</span> {</span>
             <span class="hljs-keyword">if</span> (group) {
                 designDoc[group] = designDoc[group] || {};
-                <span class="hljs-keyword">if</span>(funStr) designDoc[group][funName] = funStr;
-                <span class="hljs-keyword">else</span> <span class="hljs-keyword">delete</span> designDoc[group][funName];
+                <span class="hljs-keyword">if</span>(functionString) designDoc[group][functionName] = functionString;
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">delete</span> designDoc[group][functionName];
             }
             <span class="hljs-keyword">else</span> {
-                <span class="hljs-keyword">if</span> (funStr) designDoc[funName] = funStr;   
-                <span class="hljs-keyword">else</span> <span class="hljs-keyword">delete</span> designDoc[funName];
+                <span class="hljs-keyword">if</span> (functionString) designDoc[functionName] = functionString;   
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">delete</span> designDoc[functionName];
             }
-            api.docSave(designDoc).when(
-                vow.keep,
-                vow.break
+            api.docSave(designDoc, aDbName).when(
+                vowed.options.success,
+                vowed.options.error
             );
         }
-        api.docGet(<span class="hljs-string">'_design/'</span> + docName).when(
+        api.docGet(<span class="hljs-string">'_design/'</span> + docName, aDbName).when(
             <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(designDoc)</span> {</span>
-                <span class="hljs-keyword">if</span> (funStr === <span class="hljs-string">"?"</span>)
-                    vow.keep(designDoc[group] ? designDoc[group][funName] : designDoc[funName]);
+                <span class="hljs-keyword">if</span> (functionString === <span class="hljs-string">"?"</span>)
+                    vowed.options.success(designDoc[group] ? designDoc[group][functionName] : designDoc[functionName]);
                 <span class="hljs-keyword">else</span> save(designDoc);
             },
             <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-                <span class="hljs-keyword">if</span> (funStr === <span class="hljs-string">'?'</span>) vow[<span class="hljs-string">'break'</span>](funName  + <span class="hljs-string">"doesn't exist"</span>);
+                <span class="hljs-keyword">if</span> (functionString === <span class="hljs-string">'?'</span>) vowed.options.error(<span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, functionName  + <span class="hljs-string">"doesn't exist"</span>);
                 <span class="hljs-keyword">else</span> {
-                        <span class="hljs-keyword">var</span> designDoc = {
-                            _id : <span class="hljs-string">'_design/'</span> + docName
-                        };
+                    <span class="hljs-keyword">var</span> designDoc = {
+                        _id : <span class="hljs-string">'_design/'</span> + docName
+                    };
                     save(designDoc);
                 }
             }
         );
-        <span class="hljs-keyword">return</span> vow.promise;
+        <span class="hljs-keyword">return</span> vowed.promise;
             
     };
         
-        
-    api.dbDesignDoc = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(group, funName, funStr, aDbName)</span> {</span>
-        <span class="hljs-keyword">return</span> api.dbDesign(defaultDesignDocName, group, funName, funStr, aDbName);
-    };
-        
-    api.dbFilter = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(filterName, funStr, aDbName)</span> {</span>
+</pre></div>             </td>           </tr>                               <tr id="section-43">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-43">&#182;</a>               </div>               <h3>dbFilter</h3>
+
+<p>Set or get the a filter in the default design document</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbFilter = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(filterName, funStr, aDbName)</span> {</span>
         <span class="hljs-keyword">return</span> api.dbDesignDoc(<span class="hljs-string">'filters'</span>, filterName, funStr, aDbName);
     };
+    
+    <span class="hljs-keyword">var</span> conflictsMap = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(doc)</span> {</span>
+        <span class="hljs-keyword">if</span> (doc._conflicts) {
+            emit(<span class="hljs-literal">null</span>, [doc._rev].concat(doc._conflicts));
+        }
+    };
         
-</pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <p>---------------------------docs
-options is optional and can contain key value query params
-for instance: open_revs=all rev=asdfasf4333 conflicts=true</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docGet = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, options, aDbName)</span> {</span>
+    <span class="hljs-keyword">var</span> conflictsView = {<span class="hljs-string">"map"</span> : conflictsMap.toString()};
+        
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkForConflictsView</span><span class="hljs-params">(aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vow = VOW.make();
+        api.dbDesign(<span class="hljs-string">'couchapi'</span>, <span class="hljs-string">'views'</span>, <span class="hljs-string">'conflicts'</span>, <span class="hljs-string">"?"</span>, aDbName).
+            when(
+                vow.keep,
+                <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+                    api.dbDesign(<span class="hljs-string">'couchapi'</span>, <span class="hljs-string">'views'</span>, <span class="hljs-string">'conflicts'</span>, conflictsView, aDbName).
+                        when(
+                            vow.keep,
+                            vow.break
+                        );
+                }
+            );
+        <span class="hljs-keyword">return</span> vow.promise;
+    }
+        
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getRevs</span><span class="hljs-params">(ids, aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vow = VOW.make();
+        <span class="hljs-keyword">var</span> getters = {};
+        <span class="hljs-keyword">var</span> idVows = [];
+        <span class="hljs-built_in">Object</span>.keys(ids).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id)</span> {</span>
+            getters[id] = [];
+            <span class="hljs-keyword">var</span> revs = ids[id]; 
+            revs.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(rev)</span> {</span>
+                getters[id].push(api.docGet(id, { <span class="hljs-string">'rev'</span>: rev}, aDbName));
+            });
+            idVows.push(VOW.every(getters[id]));
+        });
+        <span class="hljs-keyword">if</span> (idVows.length === <span class="hljs-number">0</span>) vow.keep([]);
+        <span class="hljs-keyword">else</span> VOW.every(idVows).when(
+            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+                <span class="hljs-keyword">var</span> conflicts = {};
+                data.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(doc)</span> {</span>
+                    conflicts[doc[<span class="hljs-number">0</span>]._id] = doc;
+                });
+                    
+                vow.keep(conflicts);
+            },
+            vow.break
+        );
+        <span class="hljs-keyword">return</span> vow.promise;
+    }
+
+</pre></div>             </td>           </tr>                               <tr id="section-44">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-44">&#182;</a>               </div>               <h3>dbConflicts</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-45">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-45">&#182;</a>               </div>               <p>Check for conflicts in a document. If fetchDocs is true not just the ids
+are returned but also the docs themselves</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.dbConflicts = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(fetchDocs, aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify();
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> fetchDocs !== <span class="hljs-string">'boolean'</span>) {
+            aDbName = fetchDocs;   
+            fetchDocs = <span class="hljs-literal">false</span>;
+        }
+        checkForConflictsView().when(
+            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+                <span class="hljs-keyword">return</span> api.viewGet(<span class="hljs-string">'couchapi'</span>, <span class="hljs-string">'conflicts'</span>, aDbName);
+            }
+        ).when(
+            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+                <span class="hljs-keyword">var</span> idsWithConflicts = {};
+                data.rows.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(r)</span>{</span>
+                    idsWithConflicts[r.id] = r.value; 
+                });
+                <span class="hljs-keyword">if</span> (!fetchDocs) <span class="hljs-keyword">return</span> VOW.kept(idsWithConflicts);
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> getRevs(idsWithConflicts, aDbName);
+            }).when(
+                vowed.options.success,
+                vowed.options.error
+            );
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+        
+</pre></div>             </td>           </tr>                               <tr id="section-46">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-46">&#182;</a>               </div>               <h2>Docs</h2>
+
+<h3>docGet</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-47">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-47">&#182;</a>               </div>               <p>Returns the specified doc from the specified db.The parameter options is
+optional and can contain key value query params for instance:
+<code>{ open_revs: all rev: asdfasf4333 conflicts: true }</code></p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docGet = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, options, aDbName)</span> {</span>
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> options !== <span class="hljs-string">'object'</span>) {
             aDbName = options;   
             options = <span class="hljs-literal">undefined</span>;
         }
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        options = $.extend({
-            success: vow.keep
-            ,error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(status)</span> {</span>
-                vow[<span class="hljs-string">'break'</span>]({ id: id, options: options, status: status});
-            }
-        },options);
-        $.couch.db(dbName).openDoc(id, options);
-        <span class="hljs-keyword">return</span> vow.promise;
+        <span class="hljs-keyword">var</span> vowed = vowerify(options); 
+        options.error = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span> {</span>
+            vowed.options.error(<span class="hljs-literal">null</span>, err, <span class="hljs-string">"Failed to get document with id "</span> + id ); };
+        couch.db(aDbName || dbName).openDoc(id, options);
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
-        
-</pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <p>Implemention of http://wiki.apache.org/couchdb/Replication<em>and</em>conflicts
-1. GET docid?conflicts=true
-2. For each member in the <em>conflicts array:
-     GET docid?rev=xxx
-   If any errors occur at this stage, restart from step 1.
-   (There could be a race where someone else has already resolved this
-   conflict and deleted that rev)
-3. Perform application-specific merging
-4. Write _bulk</em>docs with an update to the first rev and deletes of
-   the other revs.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docConflicts = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
+
+</pre></div>             </td>           </tr>                               <tr id="section-48">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-48">&#182;</a>               </div>               <h3>docConflicts</h3>
+
+<p>Implemention of <a href="http://wiki.apache.org/couchdb/Replication_and_conflicts">http://wiki.apache.org/couchdb/Replication<em>and</em>conflicts</a></p>
+
+<ol>
+<li>GET docid?conflicts=true</li>
+<li>For each member in the _conflicts array:
+ GET docid?rev=xxx
+If any errors occur at this stage, restart from step 1.
+(There could be a race where someone else has already resolved this
+conflict and deleted that rev)</li>
+<li>Perform application-specific merging</li>
+<li>Write <em>bulk</em>docs with an update to the first rev and deletes of
+the other revs.</li>
+</ol>             </td>             <td class="code">               <div class="highlight"><pre>    api.docConflicts = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, aDbName)</span> {</span>
         <span class="hljs-keyword">var</span> result = [];
-        <span class="hljs-keyword">var</span> vow = VOW.make();
+        <span class="hljs-keyword">var</span> vowed = vowerify();
         <span class="hljs-keyword">var</span> retries = <span class="hljs-number">0</span>;
             
         <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getRevsVow</span><span class="hljs-params">(revs)</span> {</span>
             <span class="hljs-keyword">var</span> revGetters = [];
             revs.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(rev)</span> {</span>
-                revGetters.push(api.docGet(id, { rev: rev}));
+                revGetters.push(api.docGet(id, { rev: rev}, aDbName));
             });
             <span class="hljs-keyword">return</span> VOW.every(revGetters);
         }
@@ -297,43 +516,44 @@ for instance: open_revs=all rev=asdfasf4333 conflicts=true</p>             </td>
         <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getRevs</span><span class="hljs-params">(revs)</span> {</span>
             getRevsVow(revs).when(
                 <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                    vow.keep(result.concat(data));
+                    vowed.options.success(result.concat(data));
                 },
-                <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+                <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span> {</span>
                     <span class="hljs-keyword">if</span> (retries++ <span class="xml"><span class="hljs-tag">&lt; <span class="hljs-attribute">5</span>) <span class="hljs-attribute">getRevs</span>(<span class="hljs-attribute">revs</span>);
-                    <span class="hljs-attribute">else</span> <span class="hljs-attribute">vow</span>['<span class="hljs-attribute">break</span>']({ <span class="hljs-attribute">error:</span> "<span class="hljs-attribute">Couldn</span>'<span class="hljs-attribute">t</span> <span class="hljs-attribute">find</span> <span class="hljs-attribute">at</span> <span class="hljs-attribute">least</span> <span class="hljs-attribute">one</span> <span class="hljs-attribute">of</span> <span class="hljs-attribute">the</span> <span class="hljs-attribute">conflicting</span> <span class="hljs-attribute">revs</span> <span class="hljs-attribute">of</span> <span class="hljs-attribute">doc</span> <span class="hljs-attribute">with</span> <span class="hljs-attribute">id</span> " + <span class="hljs-attribute">id</span>,
-                                        <span class="hljs-attribute">data:data</span> });
+                    <span class="hljs-attribute">else</span> <span class="hljs-attribute">vowed.options.error</span>(<span class="hljs-attribute">null</span>, <span class="hljs-attribute">err</span>,
+                                             "<span class="hljs-attribute">Couldn</span>'<span class="hljs-attribute">t</span> <span class="hljs-attribute">find</span> <span class="hljs-attribute">at</span> <span class="hljs-attribute">least</span> <span class="hljs-attribute">one</span> <span class="hljs-attribute">of</span> <span class="hljs-attribute">the</span> <span class="hljs-attribute">conflicting</span> <span class="hljs-attribute">revs</span> <span class="hljs-attribute">of</span> <span class="hljs-attribute">doc</span> <span class="hljs-attribute">with</span> <span class="hljs-attribute">id</span> " + <span class="hljs-attribute">id</span>);
                 }
             );
         }
             
         <span class="hljs-attribute">function</span> <span class="hljs-attribute">getRevIds</span>(<span class="hljs-attribute">id</span>) {
-            <span class="hljs-attribute">api.docGet</span>(<span class="hljs-attribute">id</span>, { <span class="hljs-attribute">conflicts:</span> <span class="hljs-attribute">true</span> })<span class="hljs-attribute">.when</span>(
+            <span class="hljs-attribute">api.docGet</span>(<span class="hljs-attribute">id</span>, { <span class="hljs-attribute">conflicts:</span> <span class="hljs-attribute">true</span> }, <span class="hljs-attribute">aDbName</span>)<span class="hljs-attribute">.when</span>(
                 <span class="hljs-attribute">function</span>(<span class="hljs-attribute">doc</span>) {
                     <span class="hljs-attribute">var</span> <span class="hljs-attribute">revs</span> = <span class="hljs-attribute">doc._conflicts</span>;
                     <span class="hljs-attribute">delete</span> <span class="hljs-attribute">doc._conflicts</span>;
                     <span class="hljs-attribute">result.push</span>(<span class="hljs-attribute">doc</span>);
                     <span class="hljs-attribute">if</span> (<span class="hljs-attribute">revs</span>) <span class="hljs-attribute">getRevs</span>(<span class="hljs-attribute">revs</span>); 
-                    <span class="hljs-attribute">else</span> <span class="hljs-attribute">vow.keep</span>(<span class="hljs-attribute">result</span>);
+                    <span class="hljs-attribute">else</span> <span class="hljs-attribute">vowed.options.success</span>(<span class="hljs-attribute">result</span>);
                 },
-                <span class="hljs-attribute">function</span>(<span class="hljs-attribute">data</span>) {
-</span></span></pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <p>couldn't find the doc, give up</p>             </td>             <td class="code">               <div class="highlight"><pre>                    vow[<span class="hljs-string">'break'</span>]({ error: <span class="hljs-string">"Couldn't find doc with id "</span> + id, data:data });
+                <span class="hljs-attribute">function</span>(<span class="hljs-attribute">err</span>) {
+                    <span class="hljs-attribute">vowed.options.error</span>(<span class="hljs-attribute">null</span>, <span class="hljs-attribute">err</span>,  "<span class="hljs-attribute">Couldn</span>'<span class="hljs-attribute">t</span> <span class="hljs-attribute">find</span> <span class="hljs-attribute">doc</span> <span class="hljs-attribute">with</span> <span class="hljs-attribute">id</span> " + <span class="hljs-attribute">id</span>);
                 });
         }
             
-        getRevIds(id);
-        <span class="hljs-keyword">return</span> vow.promise;
+        <span class="hljs-attribute">getRevIds</span>(<span class="hljs-attribute">id</span>);
+        <span class="hljs-attribute">return</span> <span class="hljs-attribute">vowed.promise</span>;
     };
-        
-</pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <p>pass in a doc or id you suspect has conflicts.
-resolver is called to decide between conflicting revs
-if resolver is left out, a promise is returned with the revs to
-choose from, and a continuing function (choose)  to call when you've decided
-which is the winning rev, pass in its index. Again a promise
+
+</span></span></pre></div>             </td>           </tr>                               <tr id="section-49">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-49">&#182;</a>               </div>               <h3>docResolveConflicts</h3>
+
+<p>Pass in a doc or id you suspect has conflicts.
+Resolver is called to decide between conflicting revs.
+If resolver is left out, a promise is returned with the revs to
+choose from, and a continuing function to call when you've decided
+which is the winning rev. Pass in its index. Again a promise
 is returned of good things achieved..</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docResolveConflicts = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(doc, resolver, aDbName)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make();
+        <span class="hljs-keyword">var</span> vowed = vowerify();
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> resolver !== <span class="hljs-string">'function'</span>) aDbName = resolver;
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
         <span class="hljs-keyword">var</span> id = doc.id ? doc.id : doc;
             
         <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepRevs</span><span class="hljs-params">(revs, winningRev)</span> {</span>
@@ -345,13 +565,13 @@ is returned of good things achieved..</p>             </td>             <td clas
             }
         }
             
-        api.docConflicts(id).when(
+        api.docConflicts(id, aDbName).when(
             <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(revs)</span> {</span>
                 <span class="hljs-keyword">if</span> (revs.length === <span class="hljs-number">1</span>) {
                     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> resolver === <span class="hljs-string">'function'</span>)
-                        vow.keep(revs[<span class="hljs-number">0</span>]);   
+                        vowed.options.success(revs[<span class="hljs-number">0</span>]);   
                     <span class="hljs-keyword">else</span> {
-                        vow.keep({
+                        vowed.options.success({
                             revs: revs,
                             fun: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span> <span class="hljs-keyword">return</span> VOW.kept(); }
                         });
@@ -360,483 +580,305 @@ is returned of good things achieved..</p>             </td>             <td clas
                 <span class="hljs-keyword">else</span> {
                     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> resolver === <span class="hljs-string">'function'</span>) {
                         prepRevs(revs, resolver(revs));
-                        api.docBulkSave(revs).when(
-                            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span> vow.keep(data); },
-                            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span> vow[<span class="hljs-string">'break'</span>](data); }
+                        api.docBulkSave(revs, aDbName).when(
+                            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span> vowed.options.success(data); },
+                            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span> vowed.options.error(data); }
                         );
                     }
-                    <span class="hljs-keyword">else</span> vow.keep(
+                    <span class="hljs-keyword">else</span> vowed.options.success(
                         { revs: revs,
                           choose: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(winningRev)</span> {</span>
                               prepRevs(revs, winningRev);
-                              <span class="hljs-keyword">return</span> api.docBulkSave(revs);
+                              <span class="hljs-keyword">return</span> api.docBulkSave(revs, aDbName);
                           }
                         }
                     );
                 }
             }, 
-            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span> vow[<span class="hljs-string">'break'</span>](data); }
+            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span> {</span> vowed.options.error(<span class="hljs-literal">null</span>, err); }
         );
-        <span class="hljs-keyword">return</span> vow.promise;
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
-</pre></div>             </td>           </tr>                               <tr id="section-22">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-22">&#182;</a>               </div>               <hr />             </td>             <td class="code">               <div class="highlight"><pre>        
-    api.docRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(doc, aDbName)</span> {</span>
+        
+</pre></div>             </td>           </tr>                               <tr id="section-50">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-50">&#182;</a>               </div>               <h3>docRemove</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-51">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-51">&#182;</a>               </div>               <p>Remove a document from a database. You either pass in the document's id or
+the document itself.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(doc, aDbName)</span> {</span>
         <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> doc === <span class="hljs-string">'string'</span>)
             <span class="hljs-keyword">return</span> api.docRemoveById(doc, aDbName);
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).removeDoc(doc, {
-            success: vow.keep,
-            error: vow.break
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.db(aDbName || dbName).removeDoc(doc, vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
         
     api.docRemoveById = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make();
-        api.docGet(id).when(
+        <span class="hljs-keyword">var</span> vowed = vowerify();
+        api.docGet(id, aDbName).when(
             <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(doc)</span> {</span>
-                api.docRemove(doc).when(
-                    vow.keep,
-                    vow.break
+                api.docRemove(doc, aDbName).when(
+                    vowed.options.success,
+                    vowed.options.error
                 );
             },
-            vow.keep
+            vowed.options.success
         );
-        <span class="hljs-keyword">return</span> vow.promise;
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-    api.docBulkRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(docs, aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).bulkRemove({<span class="hljs-string">"docs"</span>: docs }, {
-            success: vow.keep,
-            error: vow.break
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
+</pre></div>             </td>           </tr>                               <tr id="section-52">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-52">&#182;</a>               </div>               <h3>docBulkremove</h3>
+
+<p>Remove a set of documents</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docBulkRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(docs, aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.db(aDbName || dbName).bulkRemove({<span class="hljs-string">"docs"</span>: docs }, vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-    api.docBulkSave = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(docs, aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).bulkSave({<span class="hljs-string">"docs"</span>: docs }, {
-            success: vow.keep,
-            error: vow.break
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
+</pre></div>             </td>           </tr>                               <tr id="section-53">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-53">&#182;</a>               </div>               <h3>docBulkSave</h3>
+
+<p>Save a list of documents</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docBulkSave = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(docs, aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.db(aDbName || dbName).bulkSave({<span class="hljs-string">"docs"</span>: docs }, vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+
+</pre></div>             </td>           </tr>                               <tr id="section-54">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-54">&#182;</a>               </div>               <h3>docAllInclude</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-55">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-55">&#182;</a>               </div>               <p>Return a list of all docs in a database, including their contents. You can
+specify an array of keys to fetch.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docAllInclude= <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(keys, aDbName)</span> {</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> keys == <span class="hljs-string">'string'</span>) {
+            aDbName = keys;   
+            keys = <span class="hljs-literal">null</span>;
+        }
+        <span class="hljs-keyword">var</span> vowed = vowerify({ <span class="hljs-string">"include_docs"</span>: <span class="hljs-literal">true</span> }); 
+        <span class="hljs-keyword">if</span> (keys) vowed.options.keys = keys;
+        couch.db(aDbName || dbName).allDocs(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+
+</pre></div>             </td>           </tr>                               <tr id="section-56">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-56">&#182;</a>               </div>               <h3>docAll</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-57">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-57">&#182;</a>               </div>               <p>Fetch all the docs in this database, you can specify an array of keys to
+fetch. No contents</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docAll= <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(keys, aDbName)</span> {</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> keys == <span class="hljs-string">'string'</span>) {
+            aDbName = keys;   
+            keys = <span class="hljs-literal">null</span>;
+        }
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        <span class="hljs-keyword">if</span> (keys) vowed.options.keys = keys;
+        couch.db(aDbName || dbName).allDocs(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-    api.docAllInclude= <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).allDocs({
-            <span class="hljs-string">"include_docs"</span>: <span class="hljs-literal">true</span>,
-            success: vow.keep,
-            error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(status, reason)</span> {</span>
-                vow.break(reason);
-            }
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
+</pre></div>             </td>           </tr>                               <tr id="section-58">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-58">&#182;</a>               </div>               <h3>docAllDesignInclude</h3>
+
+<p>Return a list of all design docs in a database, including their contents</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docAllDesignInclude = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify({ <span class="hljs-string">"include_docs"</span>: <span class="hljs-literal">true</span> }); 
+        couch.db(aDbName || dbName).allDesignDocs(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-        
-    api.docAll= <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).allDocs({
-            success: vow.keep,
-                
-            error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(status, reason)</span> {</span>
-                vow.break(reason); }
-                
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
+</pre></div>             </td>           </tr>                               <tr id="section-59">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-59">&#182;</a>               </div>               <h3>docAllDesign</h3>
+
+<p>Fetch all the design docs, no contents</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docAllDesign= <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.db(aDbName || dbName).allDesignDocs(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
-        
-    api.docAllDesignInclude = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).allDesignDocs({
-            <span class="hljs-string">"include_docs"</span>: <span class="hljs-literal">true</span>,
-            success: vow.keep,
-            error: vow.break
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-        
-    api.docAllDesign= <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).allDesignDocs({
-            success: vow.keep,
-            error: vow.break
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-</pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>               <p>not working under cors at least: XMLHttpRequest cannot load
+    
+</pre></div>             </td>           </tr>                               <tr id="section-60">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-60">&#182;</a>               </div>               <h3>docCopy</h3>
+
+<p>The COPY command (which is non-standard HTTP) copies an existing
+document to a new or existing document.</p>             </td>             <td class="code">               <div class="highlight"><pre>        
+</pre></div>             </td>           </tr>                               <tr id="section-61">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-61">&#182;</a>               </div>               <p>Not working under cors at least: XMLHttpRequest cannot load
 http://localhost:5984/b/asdfasf. Method COPY is not allowed
 by Access-Control-Allow-Methods.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docCopy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, newId, aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).copyDoc(id, {
-            success: vow.keep,
-            error: vow.break
-        }, {
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.db(aDbName || dbName).copyDoc(id, vowed.options, {
             beforeSend: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(xhr)</span> {</span>
                 xhr.setRequestHeader(<span class="hljs-string">"Destination"</span>, newId);
             }
         });
-        <span class="hljs-keyword">return</span> vow.promise;
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
-        
-    api.docSave = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(doc, aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).saveDoc(doc, {
-            success: vow.keep,
-            error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(status, error, reason)</span> {</span>
-                <span class="hljs-keyword">var</span> data = { status: status };
-                <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> reason === <span class="hljs-string">'string'</span>)
-                    data.reason = reason;
-                <span class="hljs-keyword">else</span> data.reason = error;
-                        
-                vow.break(data);   
-            }
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
+
+</pre></div>             </td>           </tr>                               <tr id="section-62">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-62">&#182;</a>               </div>               <h3>docSave</h3>
+
+<p>Create a new document in the specified database, using the supplied
+JSON document structure. If the JSON structure includes the _id
+field, then the document will be created with the specified document
+ID. If the _id field is not specified, a new unique ID will be
+generated.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docSave = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(doc, aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.db(aDbName || dbName).saveDoc(doc, vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
-        
-</pre></div>             </td>           </tr>                               <tr id="section-24">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-24">&#182;</a>               </div>               <p>-----------------misc </p>             </td>             <td class="code">               <div class="highlight"><pre>    api.list = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(designDoc, listName, aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).list(designDoc + <span class="hljs-string">'/'</span> + listName,<span class="hljs-string">'all'</span>, {
-            success: vow.keep,
-            error: vow.break,
-            reduce: <span class="hljs-literal">false</span>
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-    api.viewCompact = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = vow.make(); 
-        $.couch.db(dbName).compactView({
-            success: vow.keep,
-            error: vow.break
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-    api.viewCleanup = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = vow.make(); 
-        $.couch.db(dbName).viewCleanup({
-            success: vow.keep,
-            error: vow.break
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-    api.view = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(designDoc, viewName, aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).view(designDoc + <span class="hljs-string">'/'</span> + viewName , {
-            success: vow.keep,
-            error: vow.break,
-            reduce: <span class="hljs-literal">false</span>
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-    api.viewTemp = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(map, aDbName)</span> {</span>
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.db(dbName).query(map,<span class="hljs-string">"_count"</span>, <span class="hljs-string">"javascript"</span>, {
-            success: vow.keep,
-            error: vow.break,
-            reduce: <span class="hljs-literal">false</span>
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-    api.activeTasks = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.activeTasks({
-            success: vow.keep,
-            error: vow.break
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-        };
-        
-    <span class="hljs-keyword">var</span> conflictsMap = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(doc)</span> {</span>
-        <span class="hljs-keyword">if</span> (doc._conflicts) {
-            emit(<span class="hljs-literal">null</span>, [doc._rev].concat(doc._conflicts));
-            }
-        };
-        
-    <span class="hljs-keyword">var</span> conflictsView = {<span class="hljs-string">"map"</span> : conflictsMap.toString()};
-        
-    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkForConflictsView</span><span class="hljs-params">()</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make();
-        api.dbDesign(<span class="hljs-string">'couchapi'</span>, <span class="hljs-string">'views'</span>, <span class="hljs-string">'conflicts'</span>, <span class="hljs-string">"?"</span>).
-            when(
-                vow.keep
-                ,<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-                    api.dbDesign(<span class="hljs-string">'couchapi'</span>, <span class="hljs-string">'views'</span>, <span class="hljs-string">'conflicts'</span>, conflictsView).
-                        when(
-                            vow.keep,
-                            vow.break
-                        );
-                }
-            );
-        <span class="hljs-keyword">return</span> vow.promise;
-    }
-        
-        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getRevs</span><span class="hljs-params">(ids)</span> {</span>
-                <span class="hljs-keyword">var</span> vow = VOW.make();
-            <span class="hljs-keyword">var</span> getters = {};
-            <span class="hljs-keyword">var</span> idVows = [];
-            <span class="hljs-built_in">Object</span>.keys(ids).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id)</span> {</span>
-                getters[id] = [];
-                <span class="hljs-keyword">var</span> revs = ids[id]; 
-                revs.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(rev)</span> {</span>
-                    getters[id].push(api.docGet(id, { <span class="hljs-string">'rev'</span>: rev}));
-                });
-                idVows.push(VOW.every(getters[id]));
-            });
-            <span class="hljs-keyword">if</span> (idVows.length === <span class="hljs-number">0</span>) vow.keep([]);
-            <span class="hljs-keyword">else</span> VOW.every(idVows).when(
-                <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                    <span class="hljs-keyword">var</span> conflicts = {};
-                    data.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(doc)</span> {</span>
-                        conflicts[doc[<span class="hljs-number">0</span>]._id] = doc;
-                    });
-                    
-                    vow.keep(conflicts);
-                },
-                vow.break
-            );
-            <span class="hljs-keyword">return</span> vow.promise;
-        }
-        
-    api.dbConflicts = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(fetchDocs, aDbName)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make();
-        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> fetchDocs !== <span class="hljs-string">'boolean'</span>) {
-            aDbName = fetchDocs;   
-            fetchDocs = <span class="hljs-literal">false</span>;
-        }
-        <span class="hljs-keyword">if</span> (aDbName) dbName = aDbName;
-        checkForConflictsView().when(
-            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-                <span class="hljs-keyword">return</span> api.view(<span class="hljs-string">'couchapi'</span>, <span class="hljs-string">'conflicts'</span>);
-            }
-        ).when(
-            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                console.log(data);
-                <span class="hljs-keyword">var</span> idsWithConflicts = {};
-                data.rows.forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(r)</span>{</span>
-                    idsWithConflicts[r.id] = r.value; 
-                });
-                <span class="hljs-keyword">if</span> (!fetchDocs) <span class="hljs-keyword">return</span> VOW.kept(idsWithConflicts);
-                <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> getRevs(idsWithConflicts);
+    
+</pre></div>             </td>           </tr>                               <tr id="section-63">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-63">&#182;</a>               </div>               <h3>docUpdate</h3>
+
+<p>Updates a document</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.docUpdate = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(doc, aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify();
+        api.docGet(doc._id, aDbName).when(
+            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(fetchedDoc)</span> {</span>
+                doc._rev = fetchedDoc._rev;
+                <span class="hljs-keyword">return</span> api.docSave(doc, aDbName);
             }).when(
-                vow.keep,
-                vow.break
-            );
-        <span class="hljs-keyword">return</span> vow.promise;
+                <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+                    vowed.options.success(data);
+                },
+                <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(err)</span> {</span>
+                    vowed.options.error(<span class="hljs-literal">null</span>, err);
+                }
+            );  
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-25">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-25">&#182;</a>               </div>               <p>not tested yet</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicateStop = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(repId)</span> {</span>
+</pre></div>             </td>           </tr>                               <tr id="section-64">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-64">&#182;</a>               </div>               <h2>Views</h2>
+
+<h3>viewCompact</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-65">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-65">&#182;</a>               </div>               <p>Compacts the view indexes associated with the specified design
+document. You can use this in place of the full database compaction if
+you know a specific set of view indexes have been affected by a recent
+database change.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewCompact = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify();
+        couch.db(aDbName || dbName).compactView(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+        
+</pre></div>             </td>           </tr>                               <tr id="section-66">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-66">&#182;</a>               </div>               <h3>viewCleanup</h3>
+
+<p>Cleans up the cached view output on disk for a given view.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewCleanup = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.db(aDbName || dbName).viewCleanup(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+        
+</pre></div>             </td>           </tr>                               <tr id="section-67">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-67">&#182;</a>               </div>               <h3>viewGet</h3>             </td>             <td class="code">               <div class="highlight"><pre>    
+</pre></div>             </td>           </tr>                               <tr id="section-68">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-68">&#182;</a>               </div>               <p>Executes the specified view-name from the specified design-doc design
+document, you can specify a list of <code>keys</code> in the options
+object to recieve only those keys.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewGet = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(designDoc, viewName, keys, aDbName)</span> {</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> keys === <span class="hljs-string">'string'</span>) {
+            aDbName = keys;
+            keys = <span class="hljs-literal">null</span>;
+        }
+        <span class="hljs-keyword">var</span> options = { reduce: <span class="hljs-literal">false</span> };
+        <span class="hljs-keyword">if</span> (keys) options.keys = keys;
+        <span class="hljs-keyword">var</span> vowed = vowerify(options); 
+        couch.db(aDbName || dbName).view(designDoc + <span class="hljs-string">'/'</span> + viewName ,vowed.options );
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+
+</pre></div>             </td>           </tr>                               <tr id="section-69">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-69">&#182;</a>               </div>               <h3>viewTemp</h3>
+
+<p>Creates (and executes) a temporary view based on the view function
+supplied in the map paramater, either as string or function object.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewTemp = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(map, aDbName)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify({ reduce: <span class="hljs-literal">false</span> }); 
+        couch.db(aDbName || dbName).query(map,<span class="hljs-string">"_count"</span>, <span class="hljs-string">"javascript"</span>, vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+    
+</pre></div>             </td>           </tr>                               <tr id="section-70">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-70">&#182;</a>               </div>               <h2>Replications</h2>
+
+<h3>replicateStop</h3>
+
+<p>Stop a replication by id. <br />
+Not tested yet</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicateStop = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(repId)</span> {</span>
         <span class="hljs-keyword">var</span> repOptions = repOptions || {};
         repOptions.cancel = <span class="hljs-literal">true</span>;
         repOptions.replication_id = repId;
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.replicate(<span class="hljs-string">''</span>, <span class="hljs-string">''</span>, {
-            success: vow.keep,
-            error: vow.break
-        }, repOptions);
-        <span class="hljs-keyword">return</span> vow.promise;
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.replicate(<span class="hljs-string">''</span>, <span class="hljs-string">''</span>, vowed.options, repOptions);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+
+</pre></div>             </td>           </tr>                               <tr id="section-71">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-71">&#182;</a>               </div>               <h3>replicateDo</h3>
+
+<p>Set up a replication</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicateDo = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(db1, db2, repOptions)</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.replicate(db1, db2, vowed.options, repOptions);
+        <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-    api.replicateDo = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(db1, db2, repOptions)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.replicate(db1, db2, {
-            success: vow.keep,
-            error: vow.break
-        }, repOptions);
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-</pre></div>             </td>           </tr>                               <tr id="section-26">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-26">&#182;</a>               </div>               <p>"source", "target", "create<em>target", "continuous", "doc</em>ids", "filter", "query<em>params", "user</em>ctx"</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicationAdd = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, repDoc)</span> {</span>
+</pre></div>             </td>           </tr>                               <tr id="section-72">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-72">&#182;</a>               </div>               <h3>replicationAdd</h3>
+
+<p>Add a replication to the replicator database. repDoc can have the following keys:
+"source", "target", "create<em>target", "continuous", "doc</em>ids", "filter", "query<em>params", "user</em>ctx"</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicationAdd = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, repDoc, sourceDesignDoc)</span> {</span>
         repDoc._id = id || api.UUID();
         <span class="hljs-keyword">if</span> (repDoc.role)
             repDoc.user_ctx = { <span class="hljs-string">"roles"</span>: [repDoc.role] };
         <span class="hljs-keyword">if</span> (repDoc.filterName)
-            repDoc.filter = defaultDesignDocName + <span class="hljs-string">'/'</span> + repDoc.filterName;
+            repDoc.filter = sourceDesignDoc + <span class="hljs-string">'/'</span> + repDoc.filterName;
         <span class="hljs-keyword">return</span> api.docSave(repDoc, <span class="hljs-string">'_replicator'</span>);
     };
         
-    api.replicationRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id)</span> {</span>
+</pre></div>             </td>           </tr>                               <tr id="section-73">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-73">&#182;</a>               </div>               <h3>replicationRemove</h3>
+
+<p>Remove a replication by removing the document from the replicator databasee</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicationRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id)</span> {</span>
         <span class="hljs-keyword">return</span> api.docRemove(id, <span class="hljs-string">'_replicator'</span>);
     }; 
         
-        
-    api.UUID = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-        <span class="hljs-keyword">return</span> $.couch.newUUID();
-    };
-        
-        
-</pre></div>             </td>           </tr>                               <tr id="section-27">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-27">&#182;</a>               </div>               <p>------------------------users</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.userAdd = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, pwd, roles)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        <span class="hljs-keyword">var</span> userDoc = {
-            name: name
-            ,roles: roles
-        };
-        $.couch.signup(userDoc, pwd, {
-            success: vow.keep,
-            error: vow.break
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-        };
-        
-    api.userRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.userDb(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-            <span class="hljs-keyword">var</span> dbName = data.name;
-            api.docRemove(name, dbName).when(
-                vow.keep, vow[<span class="hljs-string">'break'</span>]
-            );
-</pre></div>             </td>           </tr>                               <tr id="section-28">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-28">&#182;</a>               </div>               <p>$.couch.db(dbName).removeDoc(name, {
-    success: vow.keep,
-    error: vow.break
-});</p>             </td>             <td class="code">               <div class="highlight"><pre>        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-    api.userGet = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.userDb(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-            <span class="hljs-keyword">var</span> dbName = data.name;
-            $.couch.db(dbName).openDoc(<span class="hljs-string">'org.couchdb.user:'</span> +name, {
-                success: vow.keep,
-                error: vow.break
-            });
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-        
-    api.userUpdate = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, props)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.userDb(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-            <span class="hljs-keyword">var</span> dbName = data.name;
-            $.couch.db(dbName).openDoc(<span class="hljs-string">'org.couchdb.user:'</span> + name, {
-                success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                    <span class="hljs-built_in">Object</span>.keys(props).forEach(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(p)</span> {</span>
-                        data[p] = props[p]; 
-                    });
-                    $.couch.db(dbName).saveDoc(data, {
-                        success: vow.keep,
-                        error: vow.break
-                    });
-                },
-                error: vow.break
-            });
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    };
-        
-    api.userRoles = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, roles)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        <span class="hljs-keyword">if</span> (roles) {
-            api.userUpdate(name, {roles:roles}).when(
-                vow.keep,
-                vow.break
-            );
+</pre></div>             </td>           </tr>                               <tr id="section-74">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-74">&#182;</a>               </div>               <h2>Miscellaneous</h2>
+
+<h3>listView</h3>
+
+<p>Fetch a _list view output, you can specify a list of
+keys in the options object to recieve only those keys.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.listView = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(designDoc, listName, keys, aDbName)</span> {</span>
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> keys === <span class="hljs-string">'string'</span>) {
+            aDbName = keys;
+            keys = <span class="hljs-literal">null</span>;
         }
-        <span class="hljs-keyword">else</span> api.userGet(name).when(
-            vow.keep,
-            vow.break
-        );
+        <span class="hljs-keyword">var</span> options = { reduce: <span class="hljs-literal">false</span> };
+        <span class="hljs-keyword">if</span> (keys) options.keys = keys;
+        <span class="hljs-keyword">var</span> vowed = vowerify(options); 
+        couch.db(aDbName || dbName).list(designDoc + <span class="hljs-string">'/'</span> + listName,<span class="hljs-string">'all'</span>, vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+
+</pre></div>             </td>           </tr>                               <tr id="section-75">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-75">&#182;</a>               </div>               <h3>taskActive</h3>
+
+<p>You can obtain a list of active tasks by using the /<em>active</em>tasks URL.
+The result is a JSON array of the currently running tasks, with each task
+being described with a single object.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.taskActive = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-keyword">var</span> vowed = vowerify(); 
+        couch.activeTasks(vowed.options);
+        <span class="hljs-keyword">return</span> vowed.promise;
+    };
+    
+</pre></div>             </td>           </tr>                               <tr id="section-76">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-76">&#182;</a>               </div>               <h3>withCredentials</h3>
+
+<p>Boolean flag added to xhr requests to couchdb</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.withCredentials = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(withCred)</span> {</span>
+        couch.withCredentials(withCred); 
+    };
+    
+</pre></div>             </td>           </tr>                               <tr id="section-77">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-77">&#182;</a>               </div>               <h3>uuid</h3>
+
+<p>Fetch a new UUID. If <code>batchSize</code> is defined a number of uuids are fetched
+at once and cached</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.uuid = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(batchSize)</span> {</span>
+        <span class="hljs-keyword">var</span> vow = VOW.make();
+        <span class="hljs-keyword">var</span> uuid = couch.newUUID(batchSize);
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> uuid === <span class="hljs-string">'string'</span>) vow.break({ reason: uuid });
+        <span class="hljs-keyword">else</span> vow.keep(uuid);
         <span class="hljs-keyword">return</span> vow.promise;
     };
-        
-    api.userRemoveRole = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, role)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.userDb(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-            <span class="hljs-keyword">var</span> dbName = data.name;
-            $.couch.db(dbName).openDoc(<span class="hljs-string">'org.couchdb.user:'</span> + name, {
-                success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                    <span class="hljs-keyword">if</span> (data.roles.indexOf(role) !== -<span class="hljs-number">1</span>) {
-                        data.roles = data.filter(
-                            <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span>{</span> <span class="hljs-keyword">return</span> e !==role; });
-                        $.couch.db(dbName).saveDoc(data, {
-                            success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                                vow.keep(data);
-                            },
-                            error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(status)</span> {</span>
-                                vow[<span class="hljs-string">'break'</span>](status);
-                            }
-                        });
-                    }
-                    <span class="hljs-keyword">else</span> vow.keep(data);
-                        
-                },
-                error: vow.break
-            });
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    }; 
-        
-    api.userAddRole = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(name, role)</span> {</span>
-        <span class="hljs-keyword">var</span> vow = VOW.make(); 
-        $.couch.userDb(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-            <span class="hljs-keyword">var</span> dbName = data.name;
-            $.couch.db(dbName).openDoc(<span class="hljs-string">'org.couchdb.user:'</span> + name, {
-                success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                    <span class="hljs-keyword">if</span> (data.roles.indexOf(role) === -<span class="hljs-number">1</span>) {
-                        data.roles.push(role);
-                        $.couch.db(dbName).saveDoc(data, {
-                            success: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                                vow.keep(data);
-                            },
-                            error: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(status)</span> {</span>
-                                vow[<span class="hljs-string">'break'</span>](status);
-                            }
-                        });
-                    }
-                    <span class="hljs-keyword">else</span> vow.keep(data);
-                        
-                },
-                error: vow.break
-            });
-        });
-        <span class="hljs-keyword">return</span> vow.promise;
-    }; 
-        
-    api.test = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-        api[<span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>]].apply(api, <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">1</span>)).
-            when(
-                <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                    console.log(<span class="hljs-string">"SUCCESS!!"</span>);
-                    console.log(data);
-                },
-                <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
-                    console.log(<span class="hljs-string">'FAIL'</span>);
-                    console.log(data);
-                }
-            );
+
+</pre></div>             </td>           </tr>                               <tr id="section-78">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-78">&#182;</a>               </div>               <h3>test</h3>
+
+<p>Test function for all of the above.</p>
+
+<p>Pass in the name of the api function as the first argument, and the
+arguments for the function as the rest of the arguments. The promise will
+resolved and result printed out togehter with returned data or error</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.test = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-keyword">var</span> adapter = couch.adapter;
+        <span class="hljs-keyword">var</span> fun = <span class="hljs-built_in">arguments</span>[<span class="hljs-number">0</span>];
+        api[fun].apply(api,
+                                <span class="hljs-built_in">Array</span>.prototype.slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">1</span>)).
+            when( <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+                console.log(adapter + <span class="hljs-string">'.'</span> + fun + <span class="hljs-string">': '</span>, data);
+            },
+                  <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span> {</span>
+                      console.log(<span class="hljs-string">'Fail '</span> + adapter + <span class="hljs-string">'.'</span> + fun + <span class="hljs-string">': '</span>, data);
+                  });
         <span class="hljs-keyword">return</span> <span class="hljs-string">'Wait for it...'</span>;
     };
 
     <span class="hljs-keyword">return</span> api;
-  }
-  
-  
- ));
+}));
 
 
 </pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
