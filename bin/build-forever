@@ -1,1 +1,1 @@
-forever node_modules/html-builder/buildMonitor.js 
+forever node_modules/html-builder/bin/buildMonitor.js 

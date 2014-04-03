@@ -27,7 +27,7 @@ an actual database include one or all of the following files:
 	
 Attaches the _async object to couchapi. Used to access a couchdb instance.
 	 
-    lib/pouchdb.js 
+    pouchdb.js 
 	
 Use the one included or get the latest one from [pouchdb](http://pouchdb.com).	
 	
@@ -59,6 +59,33 @@ async version of the api (jquery.couch.js) can still be accessed through
 
 Checkout the docco generated file
 [couchapi.html](https://rawgithub.com/Michieljoris/couchapi/master/docs/couchapi.html).
+
+### Test
+
+The whole project really only consists of a few files, namely the ones in the
+lib directory. All the other files and directories have been created by
+[js-project](http://github.com/Michieljoris/js-project) to faciliate testing and
+developing.
+
+Run a CouchDB instance locally or on the net.
+
+Start up a server and serve up the index.html in the www directory.
+
+Or, in the couchapi project directory:
+
+	npm install
+
+This will install a [server](http://github.com/Michieljoris/bb-server) and
+[site builder](http://github.com/Michieljoris/html-builder) I wrote. A bit
+overkill, but easy.
+
+Start it up with:
+
+	bin/develop
+	
+Navigate to localhost:<portnumber> in your browser, where portnumber is the one
+shown when you executed the previous command.
+
 
 ### Notes
 		

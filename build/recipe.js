@@ -106,12 +106,12 @@ var exports = {
     //to generate a string to save to the file defined in 'out'.
     ,partials: {
         ids: {
-            title: '<title>Scaffold</title>'
+            title: '<title>Test couchapi</title>'
             ,skewer: develop_mode ? '<script src="http://localhost:9090/skewer"></script>' : ' '
             // ,recaptcha: '<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>'
             // ,fragment: '<meta name="fragment" content="!">'
             
-            ,hello_world: '<h2>couchapi test</h2>'
+            ,hello_world: '<h2>Couchapi test</h2>Please open devtools for test results.'
         }
         ,metaBlock : {
             id: 'meta',
@@ -177,7 +177,7 @@ var exports = {
                     ,'couchapi_async.js',
                     ,'couchapi_pouch.js',
                     'couchapi.js'
-                    ,'main.js'    
+                    ,'test.js'    
                 ],
                 path: 'scripts/'
             }
@@ -236,7 +236,7 @@ var exports = {
                //want to retrieve cachified versions. Include the resources
                //under cachify.list
                ,mapping: {
-                   head: ['title', 'meta',  'html/ieshim','skewer',
+                   head: ['title', 'meta',  'html/ieshim',//'skewer',
                           // 'firebug',
                           'headJsBlock',
                           'linkBlock'

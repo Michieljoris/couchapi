@@ -1,1 +1,1 @@
-nodemon node_modules/html-builder/buildMonitor.js 
+nodemon node_modules/bin/html-builder/buildMonitor.js 

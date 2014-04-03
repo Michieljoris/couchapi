@@ -18,7 +18,7 @@ var options = {
     root: './www'
     //if not assigned defaults to 8080. If that port's not available
     //the server will try 8081 and so on.
-    ,port: 9002
+    ,port: 7002
     // Assign true to allow listing of directories when the path in
     // the url matches a path on the server relative to the
     // root. Assign an array of paths to limit listing to the listed
@@ -28,7 +28,7 @@ var options = {
     // over instead of the directory listing. Assign a string to look
     // for and send a different default file. Defaults to false and to
     // 'index.html' if assigned true.
-    ,index: false
+    ,index: true
     
     //if a request for /favicon comes in send the favicon found in the
     //path specified (relative to where this script is executed from), 

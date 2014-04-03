@@ -1,1 +1,1 @@
-./bin/build-forever & node server/server.js
+./bin/build & node server/server.js
