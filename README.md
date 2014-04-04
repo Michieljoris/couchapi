@@ -1,6 +1,6 @@
 In testing stage at the moment...
 
-couchapi
+vouchdb
 ------
 
 An api for couchdb and pouchdb using vows, deployable on both node and the browser.
@@ -17,48 +17,48 @@ Any version will do.
 
 Promises implementation. You will have a new global `VOW`.  
 
-	lib/couchapi.js 
+	lib/vouchdb.js 
 	
-This will create a global variable `couchapi`. Use its properties to access
+This will create a global variable `vouchdb`. Use its properties to access
 couchdb using a promises based api. This is just the wrapper though, to access
 an actual database include one or all of the following files:
 	
-	lib/couchapi_async.js  
+	lib/vouchdb_async.js  
 	
-Attaches the _async object to couchapi. Used to access a couchdb instance.
+Attaches the _async object to vouchdb. Used to access a couchdb instance.
 	 
     pouchdb.js 
 	
 Use the one included or get the latest one from [pouchdb](http://pouchdb.com).	
 	
-	lib/couchapi_pouch.js 
+	lib/vouchdb_pouch.js 
 	
-This attaches the _pouch object to couchapi. Now couchapi can also talk to the
+This attaches the _pouch object to vouchdb. Now couchapi can also talk to the
 in browser pouchdb.
 	
 ### Install in node
 
 In your project folder execute:
 
-    npm install couchapi
+    npm install vouchdb
 	
 or
 
-	npm install git://github.com/michieljoris/couchapi.git
+	npm install git://github.com/michieljoris/vouchdb.git
 	
 This uses the nodejs versions of jquery and vow. The module can be required
 with:
 
-    var couchapi = require('couchapi');
+    var vouchdb = require('couchapi');
 	
 ### Use
 
-The api can be accessed through functions attached to `couchapi`. The
+The api can be accessed through functions attached to `vouchdb`. The
 async version of the api (jquery.couch.js) can still be accessed through
-`couchapi._async`. The pouch version through `couchapi._pouch`.
+`vouchdb._async`. The pouch version through `couchapi._pouch`.
 
 Checkout the docco generated file
-[couchapi.html](https://rawgithub.com/Michieljoris/couchapi/master/docs/couchapi.html).
+[vouchdb.html](https://rawgithub.com/Michieljoris/vouchdb/master/docs/vouchdb.html).
 
 ### Test
 
@@ -71,7 +71,7 @@ Run a CouchDB instance locally or on the net.
 
 Start up a server and serve up the index.html in the www directory.
 
-Or, in the couchapi project directory:
+Or, in the vouchdb project directory:
 
 	npm install
 
@@ -93,8 +93,8 @@ The promises implementation is the one from
 [Douglas Crockford](https://github.com/douglascrockford/monad/raw/master/vow.js). Simple
 and sufficient.
 
-Couchapi is mirroring almost all functionality of the jquery javascript
-adapter that comes with futon, but the functions are returning vows
+vouchdb is mirroring almost all functionality of the jquery javascript
+Adapter that comes with futon, but the functions are returning vows
 instead of expecting success and error callbacks passed in.
 
 I added a few more utility functions mainly to easily configure and modify
@@ -127,12 +127,12 @@ A good doc for the original jquery.couch.js version is
 and
 [http://daleharvey.github.io/jquery.couch.js-docs/symbols/index.html](http://daleharvey.github.io/jquery.couch.js-docs/symbols/index.html)
 I've modified it slightly so it can be run in the browser as will as on
-nodejs. Access it using `couchapi._async`.
+nodejs. Access it using `vouchdb._async`.
 
-Pouchdb is an in browser database with CouchDB functionality. Using couchapi your
+Pouchdb is an in browser database with CouchDB functionality. Using vouchdb your
 application can be agnostic about what backend it is using: Pouchdb or
-Couchdb. Couchapi uses couchapi_async.js (jquery.couch.js from the CouchDB server
-installation) to connect to a CouchDB instance both on node and in the browser,
+Couchdb. vouchdb uses couchapi_async.js (jquery.couch.js from the CouchDB server
+Installation) to connect to a CouchDB instance both on node and in the browser,
 and not the PouchDB api because it is more flexible, code is easier to
 understand (just a bunch of direct ajax requests) and a lot smaller than
 PouchDB. 
@@ -142,6 +142,6 @@ PouchDB.
 Some functionality is missing, attachments, show and list views etc. Wrote it
 for my own use. As I need more features I might add them.
 
-Since we're using node-jquery for an easy port of couchapi to node the
+Since we're using node-jquery for an easy port of vouchdb to node the
 xmlhttprequest is not supporting sessions at the moment on nodejs. I hope to fix
 that. Hope to factor out the jquery dependency as well.
