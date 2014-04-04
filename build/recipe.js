@@ -106,12 +106,12 @@ var exports = {
     //to generate a string to save to the file defined in 'out'.
     ,partials: {
         ids: {
-            title: '<title>Test couchapi</title>'
+            title: '<title>Test vouchdb</title>'
             ,skewer: develop_mode ? '<script src="http://localhost:9090/skewer"></script>' : ' '
             // ,recaptcha: '<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>'
             // ,fragment: '<meta name="fragment" content="!">'
             
-            ,hello_world: '<h2>Couchapi test</h2>Please open devtools for test results.'
+            ,hello_world: '<h2>Vouchdb test</h2>Please open devtools for test results.'
         }
         ,metaBlock : {
             id: 'meta',
@@ -174,9 +174,9 @@ var exports = {
                     // ,'router'
                     // ,'angular.js'
                     // ,'test.coffee'
-                    ,'couchapi_async.js',
-                    ,'couchapi_pouch.js',
-                    'couchapi.js'
+                    ,'vouchdb_async.js',
+                    ,'vouchdb_pouch.js',
+                    'vouchdb.js'
                     ,'test.js'    
                 ],
                 path: 'scripts/'

@@ -1,0 +1,1 @@
+../../lib/vouchdb_pouch.js

@@ -107,7 +107,7 @@ var conflicts= {
 
 function test() {
     var fun = arguments[0];
-    return couchapi[fun].apply(couchapi, Array.prototype.slice.call(arguments, 1));
+    return vouchdb[fun].apply(vouchdb, Array.prototype.slice.call(arguments, 1));
 }
 
 function go(tests) {
@@ -126,7 +126,7 @@ function go(tests) {
                 fun = tests[counter++];
             }
             var iter = function (url, cb) {
-                couchapi.init(url);
+                vouchdb.init(url);
                 test.apply(null, fun).when(
                     function(data) {
                         console.log('%c' + fun[0], 'color:blue;font-weight:bold',  ': ', data);
@@ -153,7 +153,7 @@ function go(tests) {
 
 console.log('%cTesting couchapi:', 'text-decoration:underline;font-size:15px;color:green;');
 console.log('%cCouchDB:', 'font-size:15px;color:green;');
-couchapi.init('http://localhost:5984');
+vouchdb.init('http://localhost:5984');
 go(tests)
     .when(
         function() {
