@@ -1,3 +1,5 @@
+//Gather output from this and use it to validate the output again..
+
 var tests = [
     ['info']
     // // ['config'],
@@ -44,7 +46,9 @@ var tests = [
     
     // ,['dbSecurity']
     // ,"dbDesign"
-    // ,['dbDesign','designdoc', null, 'somefunction', "function() { return 'hello'; }"]
+    // ,['dbDesign','couchapi', 'views', 'myview', { map: "function(doc) { emit(null, doc); }" }]
+    
+    ,['dbDesign','couchapi', 'views', 'myview', "?"]
     // ,['dbDesign','designdoc', null, 'somefunction', "?" ]
     // ,['dbDesign','designdoc', null, 'somefunction', null]
     // ,['dbDesign','designdoc', null, 'somefunction', "?" ]
@@ -55,14 +59,51 @@ var tests = [
     // ,['dbConflicts'] //TODO
     
     
+    
     // ,['docSave', { _id: "someid", source: "somestring" }]
-    ,['docUpdate', { _id: "someid", source: "somestring" }]
-    ,['docGet', 'someid']
-    ,['docAllDesign']
-    ,['docAllDesignInclude']
-    ,['docAll']
+    // // ,['docUpdate', { _id: "someid", source: "somestring" }]
+    // ,['docGet', 'someid']
+    // ,['docGet', 'someid']
+    // ,['docAllDesign']
+    // ,['docAllDesignInclude']
+    // ,['docBulkSave', [{_id:"id3", field: 1 }, {_id: "id2", field: 2 }]]
+    
+    // ,['docCopy', "id3", "copied" ] //not working
+    // ,['viewCleanup']
+    // ,['viewCompact', 'couchapi']
+    
+    
+    ,"view"
+    // ,['viewTemp', function(doc) { emit('temp', doc); } ]
+    // ,['viewSet','couchapi', 'view3', function(doc) { emit('bla', doc); } ]
+    // ,['view', 'couchapi', 'view3' ] //use query for pouch, does pouch support views other than temporary?
+    // ,['viewRemove', 'couchapi', 'view3' ]
+    
+    ,['docAllInclude']
+    
+    
+    //Still to be implemented and checked
+    // ,['uuid']
+    // ,['taskActive']
+    // ,['replicate']
+    // ,['replicateStop']
+    // ,['replicationAdd']
+    // ,['replicationRemove']
+    //,['sync']
+    // ,['listView']
+    //,['docResolveConflicts', function() { console.log(arguments) }, 'someid']
+    //,['docBulkGet', ['someid']] //use query for pouch and view for couch 
+    //,['docConflicts', 'someid']
+    //,['dbConflicts']
+    //,['dbChanges']
+    
     ,['dbAll']
 ];
+
+
+var conflicts= {
+       "map": function(doc) { emit(null, doc); }
+   };
 
 function test() {
     var fun = arguments[0];
