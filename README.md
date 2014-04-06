@@ -1,4 +1,11 @@
 In testing stage at the moment...
+TODO:
+
+* Test in nodejs
+* Test changes feed
+* Test continuous replication
+* Test conflicts and resolution
+* Finish and write proper tests.
 
 vouchdb
 ------

@@ -758,106 +758,24 @@ database change.</p>             </td>             <td class="code">            
         
 </pre></div>             </td>           </tr>                               <tr id="section-68">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-68">&#182;</a>               </div>               <h3>view</h3>
 
-<p>See: http://wiki.apache.org/couchdb/HTTP<em>view</em>API#Querying_Options
-Parameter
-Value
-Default value
-Description
-   key</p>
-
-<h2>key-value</h2>
-
-<p>Must be a proper URL encoded JSON value
-   keys</p>
-
-<h2>array of key-values</h2>
-
-<p>Must be a proper URL encoded JSON array value
-   startkey</p>
-
-<h2>key-value</h2>
-
-<p>Must be a proper URL encoded JSON value
-   startkey_docid</p>
-
-<h2>document id</h2>
-
-<p>document id to start with (to allow pagination for duplicate startkeys)
-   endkey</p>
-
-<h2>key-value</h2>
-
-<p>Must be a proper URL encoded JSON value
-    endkey_docid</p>
-
-<h2>document id</h2>
-
-<p>last document id to include in the output (to allow pagination for duplicate endkeys)
-   limit</p>
-
-<h2>number of docs</h2>
-
-<p>Limit the number of documents in the output
-    stale</p>
-
-<h2>ok / update_after</h2>
-
-<p>If stale=ok is set, CouchDB will not refresh the view even if it is stale, the benefit is a an improved query latency. If stale=update<em>after is set, CouchDB will update the view after the stale result is returned. update</em>after was added in version 1.1.0.
-    descending
-true / false
-false
-change the direction of search
-    skip
-number of docs
-0
-skip n number of documents
-    group
-true
-false
-The group option controls whether the reduce function reduces to a set of distinct keys or to a single result row.
-    group_level</p>
-
-<h2>number</h2>
-
-<p>see below
-    reduce
-true / false
-true
-use the reduce function of the view. It defaults to true, if a reduce function is defined and to false otherwise.
-    include<em>docs
-true / false
-false
-automatically fetch and include the document which emitted each view entry
-    inclusive</em>end
-true / false
-true
-Controls whether the endkey is included in the result. It defaults to true.
-    update<em>seq
-true / false
-false
-Response includes an update</em>seq value indicating which sequence id of the database the view reflects</p>             </td>             <td class="code">               <div class="highlight"><pre>    
-</pre></div>             </td>           </tr>                               <tr id="section-69">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-69">&#182;</a>               </div>               <p>Executes the specified view-name from the specified design-doc design
+<p>See: <a href="http://wiki.apache.org/couchdb/HTTP_view_API#Querying_Options">http://wiki.apache.org/couchdb/HTTP<em>view</em>API#Querying_Options</a>
+Executes the specified view-name from the specified design-doc design
 document, you can specify a list of <code>keys</code> in the options
 object to recieve only those keys.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.view = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(designDoc, viewName, options, aDbName)</span> {</span>
-</pre></div>             </td>           </tr>                               <tr id="section-70">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-70">&#182;</a>               </div>               <p>if (typeof keys === 'string') {
-    aDbName = keys;
-    keys = null;
-}
-var options = { reduce: false };
-if (keys) options.keys = keys;</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="hljs-keyword">var</span> vowed = vowerify(options); 
+        <span class="hljs-keyword">var</span> vowed = vowerify(options); 
         couch.db(aDbName || dbName).view(designDoc + <span class="hljs-string">'/'</span> + viewName ,vowed.options );
         <span class="hljs-keyword">return</span> vowed.promise;
     };
     
-</pre></div>             </td>           </tr>                               <tr id="section-71">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-71">&#182;</a>               </div>               <h3>Set a <code>viewName</code> in <code>designDoc</code> to <code>func</code></h3>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewSet = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(designDoc, viewName, func, aDbName)</span> {</span>
+</pre></div>             </td>           </tr>                               <tr id="section-69">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-69">&#182;</a>               </div>               <h3>Set a <code>viewName</code> in <code>designDoc</code> to <code>func</code></h3>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewSet = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(designDoc, viewName, func, aDbName)</span> {</span>
         <span class="hljs-keyword">return</span> api.dbDesign(designDoc, <span class="hljs-string">'views'</span>, viewName, { map: func.toString() }, aDbName);
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-72">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-72">&#182;</a>               </div>               <h3>Remove a <code>viewName</code> in <code>designDoc</code></h3>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(designDoc, viewName, aDbName)</span> {</span>
+</pre></div>             </td>           </tr>                               <tr id="section-70">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-70">&#182;</a>               </div>               <h3>Remove a <code>viewName</code> in <code>designDoc</code></h3>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(designDoc, viewName, aDbName)</span> {</span>
         <span class="hljs-keyword">return</span> api.dbDesign(designDoc, <span class="hljs-string">'views'</span>, viewName, <span class="hljs-literal">null</span>, aDbName);
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-73">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-73">&#182;</a>               </div>               <h3>viewTemp</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-71">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-71">&#182;</a>               </div>               <h3>viewTemp</h3>
 
 <p>Creates (and executes) a temporary view based on the view function
 supplied in the map paramater, either as string or function object.</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.viewTemp = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(map, aDbName)</span> {</span>
@@ -866,7 +784,7 @@ supplied in the map paramater, either as string or function object.</p>         
         <span class="hljs-keyword">return</span> vowed.promise;
     };
     
-</pre></div>             </td>           </tr>                               <tr id="section-74">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-74">&#182;</a>               </div>               <h2>Replications</h2>
+</pre></div>             </td>           </tr>                               <tr id="section-72">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-72">&#182;</a>               </div>               <h2>Replications</h2>
 
 <h3>replicateStop</h3>
 
@@ -880,7 +798,7 @@ Not tested yet</p>             </td>             <td class="code">              
         <span class="hljs-keyword">return</span> vowed.promise;
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-75">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-75">&#182;</a>               </div>               <h3>replicate</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-73">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-73">&#182;</a>               </div>               <h3>replicate</h3>
 
 <p>Set up a replication</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicate = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(db1, db2, repOptions)</span> {</span>
         <span class="hljs-keyword">var</span> vowed = vowerify(); 
@@ -888,7 +806,7 @@ Not tested yet</p>             </td>             <td class="code">              
         <span class="hljs-keyword">return</span> vowed.promise;
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-76">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-76">&#182;</a>               </div>               <h3>replicationAdd</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-74">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-74">&#182;</a>               </div>               <h3>replicationAdd</h3>
 
 <p>Add a replication to the replicator database. repDoc can have the following keys:
 "source", "target", "create<em>target", "continuous", "doc</em>ids", "filter", "query<em>params", "user</em>ctx"</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicationAdd = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id, repDoc, sourceDesignDoc)</span> {</span>
@@ -900,13 +818,13 @@ Not tested yet</p>             </td>             <td class="code">              
         <span class="hljs-keyword">return</span> api.docSave(repDoc, <span class="hljs-string">'_replicator'</span>);
     };
         
-</pre></div>             </td>           </tr>                               <tr id="section-77">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-77">&#182;</a>               </div>               <h3>replicationRemove</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-75">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-75">&#182;</a>               </div>               <h3>replicationRemove</h3>
 
 <p>Remove a replication by removing the document from the replicator databasee</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.replicationRemove = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(id)</span> {</span>
         <span class="hljs-keyword">return</span> api.docRemove(id, <span class="hljs-string">'_replicator'</span>);
     }; 
         
-</pre></div>             </td>           </tr>                               <tr id="section-78">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-78">&#182;</a>               </div>               <h2>Miscellaneous</h2>
+</pre></div>             </td>           </tr>                               <tr id="section-76">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-76">&#182;</a>               </div>               <h2>Miscellaneous</h2>
 
 <h3>listView</h3>
 
@@ -923,7 +841,7 @@ keys in the options object to recieve only those keys.</p>             </td>    
         <span class="hljs-keyword">return</span> vowed.promise;
         };
 
-</pre></div>             </td>           </tr>                               <tr id="section-79">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-79">&#182;</a>               </div>               <h3>taskActive</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-77">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-77">&#182;</a>               </div>               <h3>taskActive</h3>
 
 <p>You can obtain a list of active tasks by using the /<em>active</em>tasks URL.
 The result is a JSON array of the currently running tasks, with each task
@@ -933,13 +851,13 @@ being described with a single object.</p>             </td>             <td clas
         <span class="hljs-keyword">return</span> vowed.promise;
     };
     
-</pre></div>             </td>           </tr>                               <tr id="section-80">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-80">&#182;</a>               </div>               <h3>withCredentials</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-78">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-78">&#182;</a>               </div>               <h3>withCredentials</h3>
 
 <p>Boolean flag added to xhr requests to couchdb</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.withCredentials = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(withCred)</span> {</span>
         couch.withCredentials(withCred); 
     };
     
-</pre></div>             </td>           </tr>                               <tr id="section-81">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-81">&#182;</a>               </div>               <h3>uuid</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-79">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-79">&#182;</a>               </div>               <h3>uuid</h3>
 
 <p>Fetch a new UUID. If <code>batchSize</code> is defined a number of uuids are fetched
 at once and cached</p>             </td>             <td class="code">               <div class="highlight"><pre>    api.uuid = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(batchSize)</span> {</span>
@@ -950,7 +868,7 @@ at once and cached</p>             </td>             <td class="code">          
         <span class="hljs-keyword">return</span> vow.promise;
     };
 
-</pre></div>             </td>           </tr>                               <tr id="section-82">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-82">&#182;</a>               </div>               <h3>test</h3>
+</pre></div>             </td>           </tr>                               <tr id="section-80">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-80">&#182;</a>               </div>               <h3>test</h3>
 
 <p>Test function for all of the above.</p>
 

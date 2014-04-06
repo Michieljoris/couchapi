@@ -1,4 +1,5 @@
 //Gather output from this and use it to validate the output again..
+//Set options to have pouchdb emulate couchdb as much as possible, so same responses
 
 var tests = [
     ['info']
@@ -48,7 +49,7 @@ var tests = [
     // ,"dbDesign"
     // ,['dbDesign','couchapi', 'views', 'myview', { map: "function(doc) { emit(null, doc); }" }]
     
-    ,['dbDesign','couchapi', 'views', 'myview', "?"]
+    // ,['dbDesign','couchapi', 'views', 'myview', "?"]
     // ,['dbDesign','designdoc', null, 'somefunction', "?" ]
     // ,['dbDesign','designdoc', null, 'somefunction', null]
     // ,['dbDesign','designdoc', null, 'somefunction', "?" ]
@@ -57,7 +58,6 @@ var tests = [
     // ,['dbFilter', 'mydesign', 'somefilter', "function() { return 'hello'; }"]
     // ,['dbAll']
     // ,['dbConflicts'] //TODO
-    
     
     
     // ,['docSave', { _id: "someid", source: "somestring" }]
@@ -78,28 +78,41 @@ var tests = [
     // ,['viewSet','couchapi', 'view3', function(doc) { emit('bla', doc); } ]
     // ,['view', 'couchapi', 'view3' ] //use query for pouch, does pouch support views other than temporary?
     // ,['viewRemove', 'couchapi', 'view3' ]
+    // ,['uuid']
+    // ,['docBulkSave', [{_id:"id1", field: 1 }, {_id: "id2", field: 2 }, {_id: "id3", field: 2 }]]
     
-    ,['docAllInclude']
+    // ,['docBulkRemove', [{ _id: 'id1' }, {_id: 'id2'}]]
+    // ,['uuid']
+    
+    
+    // ,['replicate', 'db1', 'db2', { _id: 'myrep' }]
+    // ,['replicationAdd', { _id: 'myrep', source: 'db1', target: 'db2', live: true}]
+    // ,"db1"
+    // ,['dbUse', 'db1']
+    // ,['docSave', { _id: 'db1id'}]
+    // ,['docAllInclude']
+    // ,"db2"
+    // ,['dbUse', 'db2']
+    // ,['docAllInclude']
+    // ,['replicationRemove',  'myrep' ]
+    
+    
+    // ,['dbUse', '_replicator']
+    // ,['docAllInclude']
+    
+    // ,['taskActive']
     
     
     //Still to be implemented and checked
-    // ,['uuid']
-    // ,['taskActive']
-    // ,['replicate']
-    // ,['replicateStop']
-    // ,['replicationAdd']
-    // ,['replicationRemove']
-    //,['sync']
-    // ,['listView']
     //,['docResolveConflicts', function() { console.log(arguments) }, 'someid']
-    //,['docBulkGet', ['someid']] //use query for pouch and view for couch 
     //,['docConflicts', 'someid']
     //,['dbConflicts']
-    //,['dbChanges']
     
     ,['dbAll']
 ];
 
+//Test separately:
+    // ,['dbChanges'], continuous replication
 
 var conflicts= {
        "map": function(doc) { emit(null, doc); }
