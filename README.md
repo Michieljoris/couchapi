@@ -4,6 +4,9 @@ TODO:
 * Test in nodejs
 * Test changes feed
 * Test continuous replication
+* Cancel replications for pouch
+* Implement seemless emulation, to erase all difference between pouch and couch
+  from a api point of view.
 * Test conflicts and resolution
 * Finish and write proper tests.
 
