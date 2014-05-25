@@ -93,8 +93,7 @@ module.exports = {
     // **NOTE:** We don't have any dependencies for this module. See the
     // `devDependencies` block for the way to include dependencies.
     "dependencies": {
-        'jQuery': "1.7.*",
-        "dougs_vow": "*"
+        'vouchdb': '*'
     },
     // What dependencies are useful only for developers?
     // Installed when we `npm install` in our working directory, but not 
