@@ -23,17 +23,17 @@ Add script tags for the following files to your html file:
 	
 Any version will do probably.
 	
-	lib/vow.js
+	src/vow.js
 
 Promises implementation. You will have a new global `VOW`.  
 
-	lib/vouchdb.js 
+	src/vouchdb.js 
 	
 This will create a global variable `vouchdb`. Use its properties to access
 couchdb using a promises based api. This is just the wrapper though, to access
 an actual database include one or all of the following files:
 	
-	lib/vouchdb_couch.js  
+	src/vouchdb_couch.js  
 	
 Attaches the _couch object to vouchdb. Used to access a couchdb instance.
 	 
@@ -41,7 +41,7 @@ Attaches the _couch object to vouchdb. Used to access a couchdb instance.
 	
 Use the one included or get the latest one from [pouchdb](http://pouchdb.com).	
 	
-	lib/vouchdb_pouch.js 
+	src/vouchdb_pouch.js 
 	
 This attaches the _pouch object to vouchdb. Now couchapi can also talk to the
 in browser pouchdb.
@@ -61,6 +61,12 @@ with:
 
     var vouchdb = require('vouchdb);
 	
+Or
+
+    var vouchdb = require('src/vouchdb)
+	
+where src/ is the path to the files contained in the src directory of this repo.
+	
 ### Use
 
 The api can be accessed through functions attached to `vouchdb`. The
@@ -75,7 +81,7 @@ Checkout the docco generated file
 ##### Browser
 
 The whole project really only consists of a few files, namely the ones in the
-lib directory. 
+src directory. 
 
 Run a CouchDB instance locally or on the net.
 
