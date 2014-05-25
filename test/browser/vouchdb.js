@@ -1,0 +1,1 @@
+../../src/vouchdb.js

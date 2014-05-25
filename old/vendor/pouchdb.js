@@ -1,1 +1,0 @@
-pouchdb-2.0.0.min.js

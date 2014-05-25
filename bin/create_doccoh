@@ -1,2 +1,0 @@
-#!/bin/sh
-node_modules/doccoh/bin/doccoh lib/vouchdb.js -o ./docs -c ./www/docs/custom.css

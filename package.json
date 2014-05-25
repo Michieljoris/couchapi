@@ -1,13 +1,11 @@
 {
-  "name": "couchapi",
+  "name": "vouchdb",
   "description": "Promise based wrapper for jquery.couch.js",
-  "homepage": "https://github.com/michieljoris/couchapi",
-  "keywords": [
-    "couchdb"
-  ],
+  "homepage": "https://github.com/michieljoris/vouchdb",
+  "keywords": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/michieljoris/web-scaffold.git"
+    "url": "https://github.com/michieljoris/vouchdb.git"
   },
   "author": {
     "name": "Michiel van Oosten",
@@ -16,24 +14,27 @@
   },
   "licenses": [
     {
-      "type": "MIT"
+      "type": "MIT",
+      "url": "http://github.com/michieljoris/vouchdb/blob/master/LICENSE.txt"
     }
   ],
+  "main": "src/vouchdb.js",
+  "bin": {},
   "engines": {
     "node": ">= 0.6.x"
   },
   "dependencies": {
-    "vouchdb": "*"
+    "dougs_vow": "*",
+    "jquery": "*",
+    "pouchdb": "*",
+    "fs-extra": "0.8.x"
   },
   "devDependencies": {
-    "bb-server": "git://github.com/michieljoris/bb-server.git",
-    "html-builder": "git://github.com/michieljoris/html-builder.git",
-    "fs-extra": "0.8.x",
-    "doccoh": "*"
+    "docco": "*"
   },
   "private": false,
   "scripts": {
-    "dist": "node dist; node_modules/.bin/doccoh src/package.js"
+    "docs": "node node_modules/.bin/docco src/vouchdb.js"
   },
-  "version": "0.0.4"
+  "version": "0.1.4"
 }

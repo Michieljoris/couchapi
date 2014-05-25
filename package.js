@@ -10,9 +10,6 @@
 // It is the closest I can get to a self-documenting `package.json` file.
 
 
-//Before executing this file for the first time do:
-//npm install fs-extra
-//in the sites directory
 
 // The `package.json` file always consists of one top level object, which is
 // what we export here in a [Node.js](http://nodejs.org) friendly way that
@@ -31,26 +28,25 @@ module.exports = {
     //
     // Leave off redundant affixes like `node-package` or `package-js`. 
     // We know it is JavaScript for Node.
-    "name": "couchapi",
+    "name": "vouchdb",
     // A single line, or sometimes slightly longer, description of our package.
     "description": "Promise based wrapper for jquery.couch.js",
     // [npm](http://npmjs.org) enforces the X.Y.Z semantic version 
     // scheme that is described at [http://semver.org/](http://semver.org/)
     // and we should follow this versioning for our package.
-
-    //If this option is falsy, the version in the package.json is bumped
+    //Comment out go auto increase version on execution of this file
     // "version": "0.1.0",
     // URL to the homepage for this package.
-    "homepage": "https://github.com/michieljoris/couchapi",
+    "homepage": "https://github.com/michieljoris/vouchdb",
     // An array of keywords used to describe this package to search engines,
     // mainly for people searching within the npm universe.
     "keywords": [
-        "couchdb", 
+        
     ],
     // Where is the source of truth for this code, and what type of repo is it?
     "repository": {
         "type": "git",
-        "url": "https://github.com/michieljoris/web-scaffold.git"
+        "url": "https://github.com/michieljoris/vouchdb.git"
     },
     // Every package should have at least one author. There are a couple of
     // formats for the author. I prefer the explicit object format as follows:
@@ -66,19 +62,30 @@ module.exports = {
     // represents the standard name of the license, like "MIT".
     "licenses": [
         {
-            "type": "MIT"
-            // ,"url": "http://github.com/michieljoris/web-scaffold/blob/master/LICENSE.txt"
+            "type": "MIT",
+            "url": "http://github.com/michieljoris/vouchdb/blob/master/LICENSE.txt"
         }
     ],
     // If there is a file that should be loaded when require()ing this 
     // folder-as-a-package, declare this file here, relative to our package 
     // structure.
-    // "main": "lib/shift-calendar.js",
+    "main": "src/vouchdb.js",
     // Essentially, which Node.js platforms do we support? These are glob
     // like expressions supported by the 
     // [npm semantic version parser](https://npmjs.org/doc/semver.html), 
     // and the below version means what it looks like: 
     //
+    
+    //Installs a binary script called vouchdb which is linked to
+    //./bin/vouchdb in the local package.
+
+    //If we have installed this package globally using npm install vouchdb
+    //-g we will be able to call this new command vouchdb from anywhere on
+    //our system.
+    "bin": {
+	// "commit": "bin/vouchdb.js"
+    },
+    
     // require a Node.js installation that is greater than or equal to version 0.6.0
     "engines": {
         "node": ">= 0.6.x"
@@ -93,7 +100,12 @@ module.exports = {
     // **NOTE:** We don't have any dependencies for this module. See the
     // `devDependencies` block for the way to include dependencies.
     "dependencies": {
-        'vouchdb': '*'
+        "dougs_vow": "*",
+        "jquery": "*",
+        "pouchdb": "*",
+        "fs-extra": "0.8.x"
+        
+        // "colors": "*",
     },
     // What dependencies are useful only for developers?
     // Installed when we `npm install` in our working directory, but not 
@@ -102,14 +114,12 @@ module.exports = {
     // tools.
     //
     // The packages we depend on for development:
+    //
+    // * **fs-extra**: Mixin for the fs (filesystem) module.
     // * **doccoh**: Documentation utility for this code.
     "devDependencies": {
-        // "bb-server": "0.4.x",
-        // "html-builder": "0.1.x",
-        "bb-server": "git://github.com/michieljoris/bb-server.git",
-        "html-builder": "git://github.com/michieljoris/html-builder.git",
-        "fs-extra": "0.8.x",
-        "doccoh": "*"
+        // "doccoh": "*"
+        "docco": "*"
     },
     // Should this package be prevented from accidental publishing by npm?
     // The default is false (not hidden), but I include this here for doc
@@ -124,11 +134,12 @@ module.exports = {
     // 
     //     npm run-script script-name
     //
-    // `dist` is a non-standard script, and can be run with:
+    // `docs` is a non-standard script, and can be run with:
     //
-    //     npm run-script dist
+    //     npm run-script docs
     "scripts": {
-        "dist": "node dist; node_modules/.bin/doccoh src/package.js"
+        // "docs": "node node_modules/.bin/doccoh package.js"
+        "docs": "node node_modules/.bin/docco src/vouchdb.js"
     }
 };
 
@@ -138,7 +149,7 @@ module.exports = {
 
 var fs = require("fs-extra");
 var packagejs = require("./package.js");
-var v = '0.0.0';
+var v = '0.1.0';
 if (!packagejs.version) {
     
     try {
