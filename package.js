@@ -101,7 +101,10 @@ module.exports = {
     // `devDependencies` block for the way to include dependencies.
     "dependencies": {
         "dougs_vow": "*",
-        "jquery": "*",
+        //For jQuery to work:
+        // https://github.com/UncoolAJ86/node-jquery/tree/1.7.2
+        // npm install jQuery jsdom htmlparser xmlhttprequest
+        "jQuery": "*",
         "pouchdb": "*",
         "fs-extra": "0.8.x"
         

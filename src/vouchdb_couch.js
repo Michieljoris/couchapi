@@ -40,7 +40,7 @@
 (function (root, factory) {
     if (typeof exports === 'object') {
         // CommonJS
-        module.exports = factory({}, require('jquery'));
+        module.exports = factory({}, require('jQuery'));
     } else if (typeof define === 'function') {
         if (define.amd) 
             // AMD

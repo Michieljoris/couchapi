@@ -14,7 +14,7 @@
     if (typeof exports === 'object') {
         // CommonJS
         var VOW = require('dougs_vow');
-        module.exports = factory({});
+        module.exports = factory({}, VOW);
         module.exports._couch = require('./vouchdb_couch.js')._couch;
         module.exports._pouch = require('./vouchdb_pouch.js')._pouch;
     } else if (typeof define === 'function') {
@@ -33,9 +33,9 @@
       
     } else {
         // Global variable
-        root.vouchdb = factory(root.vouchdb || {});
+        root.vouchdb = factory(root.vouchdb || {}, VOW);
     }
-}(this, function factory(api) {
+}(this, function factory(api, VOW) {
     "use strict";
     //#API
     //##Couchdb
@@ -47,14 +47,15 @@
     var dbName;
     var couch;
         
-    //###init
+    //###connect
     //Vouchdb will try use vouchdb_couch if present and url is passed
     //in. Otherwise will fall back to pouch.
-    api.init = function(url) {
+    api.connect = function(url) {
         couch = (api._couch && url) ? api._couch : api._pouch;
         if (!couch)
             throw new Error('vouchdb can\'t talk to a database. Either load vouchdb_couch or vouchdb_pouch, or both');
         couch.urlPrefix = url;
+        this.adapter = couch.adapter;
     };
     
     //Probably need to fiddle with the error reporting a bit more to get it

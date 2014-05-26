@@ -67,7 +67,7 @@
         allDbs: function(options) {
             //TODO: on node you could actually read the directory listing on the hard disk!!
             //only on webkit:
-            if (indexedDB.webkitGetDatabaseNames)
+            if (typeof indexedDB !== "undefined" && indexedDB.webkitGetDatabaseNames)
             {
                 var dbs = indexedDB.webkitGetDatabaseNames();
                 dbs.onerror = function(err) {
