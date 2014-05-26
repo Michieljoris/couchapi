@@ -39,10 +39,13 @@
     "use strict";
     //#API
     //##Couchdb
-    // var api = {
-    // _couch: { ... } //attached by vouchdb_couch.js
-    // _pouch: { .... } //attached by pouch_adapter.js
-    // };
+    // 
+    //     var api = {
+    //     _couch: { ... } //attached by vouchdb_couch.js
+    //     _pouch: { .... } //attached by pouch_adapter.js
+    //     connect: fn
+    //     etc..
+    //     };
     
     var dbName;
     var couch;
@@ -50,6 +53,7 @@
     //###connect
     //Vouchdb will try use vouchdb_couch if present and url is passed
     //in. Otherwise will fall back to pouch.
+    //Sets vouchdb.adapter to either pouch or couch.
     api.connect = function(url) {
         couch = (api._couch && url) ? api._couch : api._pouch;
         if (!couch)

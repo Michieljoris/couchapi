@@ -27,7 +27,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p>A simple vows based wrapper for vouchdb_async.js, which is a modified
+              <p>A simple vows based wrapper for vouchdb_couch.js, which is a modified
 jquery.couch.js, the jquery javascript adapter that comes with futon.</p>
 
             </div>
@@ -103,8 +103,8 @@ security objects and design documents.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> VOW = <span class="hljs-built_in">require</span>(<span class="hljs-string">'dougs_vow'</span>);
-        module.exports = factory({});
-        module.exports._async = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./vouchdb_async.js'</span>)._async;
+        module.exports = factory({}, VOW);
+        module.exports._couch = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./vouchdb_couch.js'</span>)._couch;
         module.exports._pouch = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./vouchdb_pouch.js'</span>)._pouch;
     } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">'function'</span>) {</pre></div></div>
             
@@ -117,7 +117,7 @@ security objects and design documents.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>neither amd nor bootstrap is tested as of March/14</p>
+              <p>neither amd nor bootstrap is tested as of March/2014</p>
 
             </div>
             
@@ -136,8 +136,8 @@ security objects and design documents.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            define([<span class="hljs-string">'lib/vouchdb_async'</span>, <span class="hljs-string">'lib/vouchdb_pouch'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(async, pouch)</span> {</span>
-                <span class="hljs-keyword">return</span> factory({ _async: async._async, _pouch: pouch._pouch });
+            <div class="content"><div class='highlight'><pre>            define([<span class="hljs-string">'lib/vouchdb_couch'</span>, <span class="hljs-string">'lib/vouchdb_pouch'</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(couch, pouch)</span> {</span>
+                <span class="hljs-keyword">return</span> factory({ _couch: couch._couch, _pouch: pouch._pouch });
             });
         <span class="hljs-keyword">else</span></pre></div></div>
             
@@ -154,9 +154,9 @@ security objects and design documents.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            define({ inject: [<span class="hljs-string">'lib/vouchdb_async'</span>, <span class="hljs-string">'lib/vouchdb_pouch'</span>],
-                     factory: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(async, pouch)</span> {</span>
-                       <span class="hljs-keyword">return</span> factory({ _async: async._async, _pouch: pouch._pouch });
+            <div class="content"><div class='highlight'><pre>            define({ inject: [<span class="hljs-string">'lib/vouchdb_couch'</span>, <span class="hljs-string">'lib/vouchdb_pouch'</span>],
+                     factory: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(couch, pouch)</span> {</span>
+                       <span class="hljs-keyword">return</span> factory({ _couch: couch._couch, _pouch: pouch._pouch });
                      }});
       
     } <span class="hljs-keyword">else</span> {</pre></div></div>
@@ -174,9 +174,9 @@ security objects and design documents.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        root.vouchdb = factory(root.vouchdb || {});
+            <div class="content"><div class='highlight'><pre>        root.vouchdb = factory(root.vouchdb || {}, VOW);
     }
-}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">factory</span><span class="hljs-params">(api)</span> {</span>
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">factory</span><span class="hljs-params">(api, VOW)</span> {</span>
 <span class="hljs-pi">    "use strict"</span>;</pre></div></div>
             
         </li>
@@ -190,11 +190,13 @@ security objects and design documents.</p>
               </div>
               <h1 id="api">API</h1>
 <h2 id="couchdb">Couchdb</h2>
-<p>var api = {
-_async: { … } //attached by vouchdb_async.js
-_pouch: { …. } //attached by pouch_adapter.js
-};</p>
-
+<pre><code><span class="hljs-keyword">var</span> api = {
+_couch: { ... } <span class="hljs-comment">//attached by vouchdb_couch.js</span>
+_pouch: { .... } <span class="hljs-comment">//attached by pouch_adapter.js</span>
+connect: fn
+etc..
+};
+</code></pre>
             </div>
             
             <div class="content"><div class='highlight'><pre>    
@@ -210,17 +212,19 @@ _pouch: { …. } //attached by pouch_adapter.js
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <h3 id="init">init</h3>
-<p>Vouchdb will try use vouchdb_async if present and url is passed
-in. Otherwise will fall back to pouch.</p>
+              <h3 id="connect">connect</h3>
+<p>Vouchdb will try use vouchdb_couch if present and url is passed
+in. Otherwise will fall back to pouch.
+Sets vouchdb.adapter to either pouch or couch.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    api.init = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url)</span> {</span>
-        couch = (api._async &amp;&amp; url) ? api._async : api._pouch;
+            <div class="content"><div class='highlight'><pre>    api.connect = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(url)</span> {</span>
+        couch = (api._couch &amp;&amp; url) ? api._couch : api._pouch;
         <span class="hljs-keyword">if</span> (!couch)
-            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'vouchdb can\'t talk to a database. Either load vouchdb_async or vouchdb_pouch, or both'</span>);
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'vouchdb can\'t talk to a database. Either load vouchdb_couch or vouchdb_pouch, or both'</span>);
         couch.urlPrefix = url;
+        <span class="hljs-keyword">this</span>.adapter = couch.adapter;
     };</pre></div></div>
             
         </li>
