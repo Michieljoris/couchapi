@@ -13,8 +13,10 @@
 (function (root, factory) {
     if (typeof exports === 'object') {
         // CommonJS
-        var VOW = require('dougs_vow');
-        module.exports = factory({}, VOW);
+        console.log('we are in node', VOW);
+        
+        var DOUGS_VOW = require('dougs_vow');
+        module.exports = factory({}, DOUGS_VOW);
         module.exports._couch = require('./vouchdb_couch.js')._couch;
         module.exports._pouch = require('./vouchdb_pouch.js')._pouch;
     } else if (typeof define === 'function') {
@@ -48,18 +50,18 @@
     //     };
     
     var dbName;
-    var couch;
+    var vouch;
         
     //###connect
     //Vouchdb will try use vouchdb_couch if present and url is passed
     //in. Otherwise will fall back to pouch.
     //Sets vouchdb.adapter to either pouch or couch.
     api.connect = function(url) {
-        couch = (api._couch && url) ? api._couch : api._pouch;
-        if (!couch)
+        vouch = (api._couch && url) ? api._couch : api._pouch;
+        if (!vouch)
             throw new Error('vouchdb can\'t talk to a database. Either load vouchdb_couch or vouchdb_pouch, or both');
-        couch.urlPrefix = url;
-        this.adapter = couch.adapter;
+        vouch.urlPrefix = url;
+        this.adapter = vouch.adapter;
     };
     
     //Probably need to fiddle with the error reporting a bit more to get it
@@ -85,7 +87,7 @@
     // value will be stored in the configuration.
     api.config = function(section, option, value) {
         var vowed = vowerify(); 
-        couch.config(vowed.options, section, option, value);
+        vouch.config(vowed.options, section, option, value);
         return vowed.promise;
     };
     //###info
@@ -95,7 +97,7 @@
     // server.
     api.info = function(){
         var vowed = vowerify();
-        couch.info(vowed.options);
+        vouch.info(vowed.options);
         return vowed.promise;
     }; 
     
@@ -103,7 +105,7 @@
     //Retrieve the couchdb log
     api.log = function(bytes, offset) {
         var vow = VOW.make();
-        couch.log({
+        vouch.log({
             //never gonna happen.. 
             success: vow.keep,
             //jquery.couch.js tries to parse the result, but it is not a json
@@ -126,7 +128,7 @@
             name: name,
             password: pwd,
             withCredentials:true });
-        couch.login(vowed.options);
+        vouch.login(vowed.options);
         return vowed.promise;
     }; 
     
@@ -134,7 +136,7 @@
     //Delete your current CouchDB user session
     api.logout = function() {
         var vowed = vowerify();
-        couch.logout(vowed.options);
+        vouch.logout(vowed.options);
         return vowed.promise;
     };
 
@@ -142,7 +144,7 @@
     //Returns the session information for the currently logged in user.
     api.session = function() {
         var vowed = vowerify();
-        couch.session(vowed.options);
+        vouch.session(vowed.options);
         return vowed.promise;
     };
     
@@ -155,7 +157,7 @@
             name: name,
             roles: roles
         };
-        couch.signup(userDoc, pwd, vowed.options);
+        vouch.signup(userDoc, pwd, vowed.options);
         return vowed.promise;
     };
         
@@ -163,7 +165,7 @@
     //Remove a user from the `_user` database
     api.userRemove = function(name) {
         var vowed = vowerify(); 
-        couch.userDb(function(data, status, error, reason) {
+        vouch.userDb(function(data, status, error, reason) {
             if (error) vowed.options.error(status, error, reason);
             else { var dbName = data.name;
                    var user_prefix = "org.couchdb.user:";
@@ -179,9 +181,9 @@
     //Get user document from `_user` database
     api.userGet = function(name) {
         var vowed = vowerify(); 
-        couch.userDb(function(data, status, error, reason) {
+        vouch.userDb(function(data, status, error, reason) {
             if (error) vowed.options.error(status, error, reason);
-            else couch.db(data.name).openDoc('org.couchdb.user:' +name, vowed.options);
+            else vouch.db(data.name).openDoc('org.couchdb.user:' +name, vowed.options);
         });
         return vowed.promise;
     };
@@ -190,15 +192,15 @@
     //Update a user document in the `_user` database
     api.userUpdate = function(name, props) {
         var vowed = vowerify(); 
-        couch.userDb(function(data, status, error, reason) {
+        vouch.userDb(function(data, status, error, reason) {
             if (error) vowed.options.error(status, error, reason);
             else { var dbName = data.name;
-                   couch.db(dbName).openDoc('org.couchdb.user:' + name, {
+                   vouch.db(dbName).openDoc('org.couchdb.user:' + name, {
                        success: function(data) {
                            Object.keys(props).forEach(function(p) {
                                data[p] = props[p]; 
                            });
-                           couch.db(dbName).saveDoc(data, vowed.options);
+                           vouch.db(dbName).saveDoc(data, vowed.options);
                        },
                        error: vowed.options.error
                    });
@@ -230,15 +232,15 @@
     //Remove a role from a user
     api.userRemoveRole = function(name, role) {
         var vowed = vowerify(); 
-        couch.userDb(function(data, status, error, reason) {
+        vouch.userDb(function(data, status, error, reason) {
             if (error) vowed.options.error(status, error, reason);
             else { var dbName = data.name;
-                   couch.db(dbName).openDoc('org.couchdb.user:' + name, {
+                   vouch.db(dbName).openDoc('org.couchdb.user:' + name, {
                        success: function(data) {
                            if (data.roles.indexOf(role) !== -1) {
                                data.roles = data.roles.filter(
                                    function(e){ return e !==role; });
-                               couch.db(dbName).saveDoc(data, vowed.options);
+                               vouch.db(dbName).saveDoc(data, vowed.options);
                            }
                            else vowed.options.succes(data);
                         
@@ -254,14 +256,14 @@
     //Add a role to a user
     api.userAddRole = function(name, role) {
         var vowed = vowerify(); 
-        couch.userDb(function(data, status, error, reason) {
+        vouch.userDb(function(data, status, error, reason) {
             if (error) vowed.options.error(status, error, reason);
             else { var dbName = data.name;
-                   couch.db(dbName).openDoc('org.couchdb.user:' + name, {
+                   vouch.db(dbName).openDoc('org.couchdb.user:' + name, {
                        success: function(data) {
                            if (data.roles.indexOf(role) === -1) {
                                data.roles.push(role);
-                               couch.db(dbName).saveDoc(data, vowed.options);
+                               vouch.db(dbName).saveDoc(data, vowed.options);
                            }
                            else vowed.options.success(data);
                         
@@ -278,7 +280,7 @@
     // Returns a list of all the databases in the CouchDB instance
     api.dbAll = function() {
         var vowed = vowerify(); 
-        couch.allDbs(vowed.options);
+        vouch.allDbs(vowed.options);
         return vowed.promise;
     };
 
@@ -295,7 +297,7 @@
     //Remove a database
     api.dbRemove = function(name) {
         var vowed = vowerify(); 
-        couch.db(name || dbName).drop(vowed.options);
+        vouch.db(name || dbName).drop(vowed.options);
         return vowed.promise;
     };
 
@@ -303,7 +305,7 @@
     //Create a new database named *name*
     api.dbCreate = function(name) {
         var vowed = vowerify(); 
-        couch.db(name || dbName).create(vowed.options);
+        vouch.db(name || dbName).create(vowed.options);
         return vowed.promise;
     }; 
 
@@ -311,7 +313,7 @@
     //Request compaction of the specified database.
     api.dbCompact = function(name) {
         var vowed = vowerify(); 
-        couch.db(name || dbName).compact(vowed.options);
+        vouch.db(name || dbName).compact(vowed.options);
         return vowed.promise;
     };
 
@@ -320,7 +322,7 @@
     //The passed in *callback* will be called with the changes. Call returned
     //object.stop to finish receiving changes.
     api.dbChanges = function(callback, since, aDbName) {
-        var changes = couch.db(aDbName || dbName).changes(since, {});
+        var changes = vouch.db(aDbName || dbName).changes(since, {});
         changes.onChange(
             callback 
         );
@@ -332,9 +334,9 @@
     // Gets information about the specified database.
     api.dbInfo = function(name) {
         var vowed = vowerify(); 
-        couch.db(name || dbName).info({
+        vouch.db(name || dbName).info({
             success: function(data) {
-                data.uri = couch.db(name || dbName).uri;
+                data.uri = vouch.db(name || dbName).uri;
                 vowed.options.success(data);
             },
             error: function(status, reason) {
@@ -361,12 +363,12 @@
     api.dbSecurity = function(securityObj, aDbName) {
         var vowed = vowerify(); 
         if (typeof securityObj === 'object') {
-            couch.db(aDbName || dbName).setDbProperty('_security', securityObj, vowed.options);
+            vouch.db(aDbName || dbName).setDbProperty('_security', securityObj, vowed.options);
                 
         }
         else  {
             aDbName = securityObj;
-            couch.db(aDbName || dbName).getDbProperty('_security', vowed.options);
+            vouch.db(aDbName || dbName).getDbProperty('_security', vowed.options);
         }
         return vowed.promise;
     };
@@ -513,7 +515,7 @@
         var vowed = vowerify(options); 
         // options.error = function(err) {
         //     vowed.options.error(null, err, "Failed to get document with id " + id ); };
-        couch.db(aDbName || dbName).openDoc(id, vowed.options);
+        vouch.db(aDbName || dbName).openDoc(id, vowed.options);
         return vowed.promise;
     };
 
@@ -638,7 +640,7 @@
             return api.docRemoveById(doc, aDbName);
         var vowed = vowerify(); 
         
-        couch.db(aDbName || dbName).removeDoc(doc, vowed.options);
+        vouch.db(aDbName || dbName).removeDoc(doc, vowed.options);
         return vowed.promise;
     };
         
@@ -658,7 +660,7 @@
     
     api.docBulkGet = function(docs, aDbName) {
         var vowed = vowerify(); 
-        couch.docBulkGet(docs, vowed.options);
+        vouch.docBulkGet(docs, vowed.options);
         return vowed.promise;
     };
         
@@ -668,7 +670,7 @@
     //docs, with at a the _id and _rev  properties
     api.docBulkRemove = function(docs, aDbName) {
         var vowed = vowerify(); 
-        couch.db(aDbName || dbName).bulkRemove({"docs": docs }, vowed.options);
+        vouch.db(aDbName || dbName).bulkRemove({"docs": docs }, vowed.options);
         return vowed.promise;
     };
         
@@ -676,7 +678,7 @@
     //Save a list of documents
     api.docBulkSave = function(docs, aDbName) {
         var vowed = vowerify(); 
-        couch.db(aDbName || dbName).bulkSave({"docs": docs }, vowed.options);
+        vouch.db(aDbName || dbName).bulkSave({"docs": docs }, vowed.options);
         return vowed.promise;
     };
 
@@ -691,7 +693,7 @@
         }
         var vowed = vowerify({ "include_docs": true }); 
         if (keys) vowed.options.keys = keys;
-        couch.db(aDbName || dbName).allDocs(vowed.options);
+        vouch.db(aDbName || dbName).allDocs(vowed.options);
         return vowed.promise;
     };
 
@@ -706,7 +708,7 @@
         }
         var vowed = vowerify(); 
         if (keys) vowed.options.keys = keys;
-        couch.db(aDbName || dbName).allDocs(vowed.options);
+        vouch.db(aDbName || dbName).allDocs(vowed.options);
         return vowed.promise;
     };
         
@@ -714,7 +716,7 @@
     //Return a list of all design docs in a database, including their contents
     api.docAllDesignInclude = function(aDbName) {
         var vowed = vowerify({ "include_docs": true }); 
-        couch.db(aDbName || dbName).allDesignDocs(vowed.options);
+        vouch.db(aDbName || dbName).allDesignDocs(vowed.options);
         return vowed.promise;
     };
         
@@ -722,7 +724,7 @@
     //Fetch all the design docs, no contents
     api.docAllDesign= function(aDbName) {
         var vowed = vowerify(); 
-        couch.db(aDbName || dbName).allDesignDocs(vowed.options);
+        vouch.db(aDbName || dbName).allDesignDocs(vowed.options);
         return vowed.promise;
     };
     
@@ -735,7 +737,7 @@
     // by Access-Control-Allow-Methods.
     api.docCopy = function(id, newId, aDbName) {
         var vowed = vowerify(); 
-        couch.db(aDbName || dbName).copyDoc(id, vowed.options, {
+        vouch.db(aDbName || dbName).copyDoc(id, vowed.options, {
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("Destination", newId);
             }
@@ -751,7 +753,7 @@
     //generated.
     api.docSave = function(doc, aDbName) {
         var vowed = vowerify(); 
-        couch.db(aDbName || dbName).saveDoc(doc, vowed.options);
+        vouch.db(aDbName || dbName).saveDoc(doc, vowed.options);
         return vowed.promise;
     };
     
@@ -783,7 +785,7 @@
     // database change.
     api.viewCompact = function(designDoc, aDbName) {
         var vowed = vowerify();
-        couch.db(aDbName || dbName).compactView(designDoc, vowed.options);
+        vouch.db(aDbName || dbName).compactView(designDoc, vowed.options);
         return vowed.promise;
     };
         
@@ -791,7 +793,7 @@
     //Cleans up the cached view output on disk for a given view.
     api.viewCleanup = function(aDbName) {
         var vowed = vowerify(); 
-        couch.db(aDbName || dbName).viewCleanup(vowed.options);
+        vouch.db(aDbName || dbName).viewCleanup(vowed.options);
         return vowed.promise;
     };
         
@@ -802,7 +804,7 @@
     // object to recieve only those keys.
     api.view = function(designDoc, viewName, options, aDbName) {
         var vowed = vowerify(options); 
-        couch.db(aDbName || dbName).view(designDoc + '/' + viewName ,vowed.options );
+        vouch.db(aDbName || dbName).view(designDoc + '/' + viewName ,vowed.options );
         return vowed.promise;
     };
     
@@ -821,7 +823,7 @@
     // supplied in the map paramater, either as string or function object.
     api.viewTemp = function(map, aDbName) {
         var vowed = vowerify({ reduce: false }); 
-        couch.db(aDbName || dbName).query(map,"_count", "javascript", vowed.options);
+        vouch.db(aDbName || dbName).query(map,"_count", "javascript", vowed.options);
         return vowed.promise;
     };
     
@@ -846,7 +848,7 @@
         
         if (repDoc.role)
             repDoc.user_ctx = { "roles": [repDoc.role] };
-        couch.replicate(repDoc, vowed.options);
+        vouch.replicate(repDoc, vowed.options);
         return vowed.promise;
     };
         
@@ -868,7 +870,7 @@
         var options = { reduce: false };
         if (keys) options.keys = keys;
         var vowed = vowerify(options); 
-        couch.db(aDbName || dbName).list(designDoc + '/' + listName,'all', vowed.options);
+        vouch.db(aDbName || dbName).list(designDoc + '/' + listName,'all', vowed.options);
         return vowed.promise;
         };
 
@@ -878,21 +880,21 @@
     // being described with a single object.
     api.taskActive = function() {
         var vowed = vowerify(); 
-        couch.activeTasks(vowed.options);
+        vouch.activeTasks(vowed.options);
         return vowed.promise;
     };
     
     //###withCredentials
     //Boolean flag added to xhr requests to couchdb
     api.withCredentials = function(withCred) {
-        couch.withCredentials(withCred); 
+        vouch.withCredentials(withCred); 
     };
     
     //###uuid
     //Fetch a new UUID. If `batchSize` is defined a number of uuids are fetched
     //at once and cached
     api.uuid = function(batchSize) {
-        return couch.newUUID(batchSize);
+        return vouch.newUUID(batchSize);
     };
 
     //###test
@@ -902,7 +904,7 @@
     //arguments for the function as the rest of the arguments. The promise will
     //resolved and result printed out togehter with returned data or error
     api.test = function() {
-        var adapter = couch.adapter;
+        var adapter = vouch.adapter;
         var fun = arguments[0];
         api[fun].apply(api, Array.prototype.slice.call(arguments, 1)).
             when( function(data) {

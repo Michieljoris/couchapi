@@ -10,6 +10,7 @@ TODO
 * factor out jquery dependency, which means:
 Extracting relevant jquery code , possibly using xmlhttprequest on node, 
 Maybe use zeptojs.com for util function.
+Or superagent
 * session support for node version
   http://codetwizzle.com/articles/couchdb-cookie-authentication-nodejs-nano/
   https://www.npmjs.org/package/nano
@@ -29,3 +30,4 @@ https://github.com/iriscouch/follow
 * write tests
 for node and web 
 * use generators instead of only promises
+* or make clojurescript version using core-async 

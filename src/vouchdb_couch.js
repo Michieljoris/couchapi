@@ -56,9 +56,8 @@
       
     } else {
         // Global variable
-        console.log('heelo');
         root.vouchdb = factory(root.vouchdb || {}, jQuery);
-        console.log('heelo', root.vouchdb);
+        // console.log('heelo', root.vouchdb);
         
     }
 })(this, function(api, $) { 
