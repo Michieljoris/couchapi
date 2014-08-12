@@ -35,4 +35,10 @@
   ]
  }
 };        
+  
+ 
+if (typeof module != 'undefined' && module &&
+      typeof exports == 'object' && exports && module.exports === exports) {
+  module.exports = expect;
+}
    

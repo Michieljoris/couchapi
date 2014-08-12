@@ -11,28 +11,15 @@
 
 //Make this script useable in multiple environments
 (function (root, factory) {
-    if (typeof exports === 'object') {
+    
+  if (typeof module != 'undefined' && module &&
+      typeof exports == 'object' && exports && module.exports === exports) {
         // CommonJS
-        console.log('we are in node', VOW);
         
         var DOUGS_VOW = require('dougs_vow');
         module.exports = factory({}, DOUGS_VOW);
         module.exports._couch = require('./vouchdb_couch.js')._couch;
         module.exports._pouch = require('./vouchdb_pouch.js')._pouch;
-    } else if (typeof define === 'function') {
-        //neither amd nor bootstrap is tested as of March/2014
-        if (define.amd) 
-            // AMD
-            define(['lib/vouchdb_couch', 'lib/vouchdb_pouch'], function (couch, pouch) {
-                return factory({ _couch: couch._couch, _pouch: pouch._pouch });
-            });
-        else
-            //[bootstrapjs](//github.com/michieljoris/bootstrapjs)
-            define({ inject: ['lib/vouchdb_couch', 'lib/vouchdb_pouch'],
-                     factory: function(couch, pouch) {
-                       return factory({ _couch: couch._couch, _pouch: pouch._pouch });
-                     }});
-      
     } else {
         // Global variable
         root.vouchdb = factory(root.vouchdb || {}, VOW);
@@ -96,6 +83,7 @@
     // about the server, including a welcome message and the version of the
     // server.
     api.info = function(){
+        
         var vowed = vowerify();
         vouch.info(vowed.options);
         return vowed.promise;

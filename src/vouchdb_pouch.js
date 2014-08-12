@@ -1,19 +1,8 @@
 (function (root, factory) {
-    if (typeof exports === 'object') {
+  if (typeof module != 'undefined' && module &&
+      typeof exports == 'object' && exports && module.exports === exports) {
         // CommonJS
         module.exports = factory({}, require('pouchdb'));
-    } else if (typeof define === 'function') {
-        if (define.amd) 
-            // AMD
-            define([], function (b) {
-	        return factory({}, jQuery);
-            });
-        else
-            //[bootstrapjs](//github.com/michieljoris/bootstrapjs)
-            define({factory: function() {
-	        return factory({}, PouchDB);
-            }});
-    
     } else {
         // Global variable
         root.vouchdb = factory(root.vouchdb || {}, PouchDB);
@@ -31,7 +20,6 @@
     //Per function or accross the board?
     api._pouch = {
         adapter: 'pouch',
-        
         
         withCredentials: function() {},
         

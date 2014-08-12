@@ -1,11 +1,16 @@
 var tests = [
     ['info']
-    // // ['config'],
+    ,['config'] 
     ,['login', 'root', 'root']
-    // ,['log', 200]
-    // ,['logout']
-    // ,['login', 'root', 'root']
-    // ,['session']
+    ,['login', 'admin', 'admin']
+    ,['config']
+    ,['log', 200]
+    ,['logout']
+    ,['config'] 
+    ,['session']
+    ,['login', 'admin', 'admin']
+    ,['session']
+  
     // ,['userRemove', 'someUser']
     // ,['userAdd', 'someUser', 'pwd', ['someRole']]
     // // ,['userGet', 'someUser']
@@ -104,5 +109,11 @@ var tests = [
     //,['docResolveConflicts', function() { console.log(arguments) }, 'someid']
     //,['docConflicts', 'someid']
     //,['dbConflicts']
-    ,['dbAll']
+    // ,['dbAll']
 ];
+  
+  
+if (typeof module != 'undefined' && module &&
+      typeof exports == 'object' && exports && module.exports === exports) {
+  module.exports = tests;
+}

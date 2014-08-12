@@ -38,23 +38,16 @@
  */
 
 (function (root, factory) {
-    if (typeof exports === 'object') {
-        // CommonJS
-        module.exports = factory({}, require('jQuery'));
-    } else if (typeof define === 'function') {
-        if (define.amd) 
-            // AMD
-            define([], function (b) {
-                return (root.vouchdb = factory(root.vouchdb || {}, jQuery));
-            });
-        else
-            //[bootstrapjs](//github.com/michieljoris/bootstrapjs)
-            define({inject: [],
-                    factory: function() {
-                        return factory(root.vouchdb || {}, jQuery);
-                    }});
-      
-    } else {
+    
+  if (typeof module != 'undefined' && module &&
+      typeof exports == 'object' && exports && module.exports === exports) {
+      // CommonJS
+      // var JQUERY = require('./jquery-bare');
+      // JQUERY.support.cors = true;
+      var JQUERY = require('./nojquery');
+      module.exports = factory({}, JQUERY);
+      // module.exports = factory({}, require('nq'));
+  }  else {
         // Global variable
         root.vouchdb = factory(root.vouchdb || {}, jQuery);
         // console.log('heelo', root.vouchdb);
@@ -70,6 +63,7 @@
     var parseJSON = $.parseJSON;
     var inArray = $.inArray;
     var jq_ajax = $.ajax;
+    // console.log('nojquery', jq_ajax);
 
     /**
      * @private
@@ -547,6 +541,7 @@
                  * jQuery.ajax/#jQuery-ajax-settings">jQuery ajax settings</a>
                  */
                 info: function(options) {
+                    
                     // console.log('hello',options);
                     ajax(
                         {url: this.uri},

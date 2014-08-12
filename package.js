@@ -104,11 +104,17 @@ module.exports = {
         //For jQuery to work:
         // https://github.com/UncoolAJ86/node-jquery/tree/1.7.2
         // npm install jQuery jsdom htmlparser xmlhttprequest
-        "jQuery": "*",
         "pouchdb": "*",
-        "fs-extra": "0.8.x"
         
-        // "colors": "*",
+        //for najax 
+        "underscore": ">=1.3.3",
+        "jquery-deferred": ">=0.2.0",
+        // "najax" : "0.1.x", //added as file
+        "xmlhttprequest" : "*" //added as file
+        
+        ,"deep-diff": "0.1.x"
+        // "nq": "*" //as replacement for jquery, najax should work
+        // "jQuery": "*"
     },
     // What dependencies are useful only for developers?
     // Installed when we `npm install` in our working directory, but not 
@@ -122,7 +128,9 @@ module.exports = {
     // * **doccoh**: Documentation utility for this code.
     "devDependencies": {
         // "doccoh": "*"
-        "docco": "*"
+        "docco": "*",
+        "fs-extra": "0.8.x",
+        "colors": "*"
     },
     // Should this package be prevented from accidental publishing by npm?
     // The default is false (not hidden), but I include this here for doc

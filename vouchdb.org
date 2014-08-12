@@ -5,29 +5,36 @@ true for now. If IE spits the dummy this is the cause maybe, and IE will have
 to be detected.
 http://stackoverflow.com/questions/14892095/browser-msie-error-after-update-to-jquery-1-9-1
 
-TODO
-* fix up package.json script property, should run docco(h)
-* factor out jquery dependency, which means:
+* TODO
+** concat files for browser!!!! 
+** fix up package.json script property, should run docco(h)
+** factor out jquery dependency, which means:
 Extracting relevant jquery code , possibly using xmlhttprequest on node, 
 Maybe use zeptojs.com for util function.
 Or superagent
-* session support for node version
-  http://codetwizzle.com/articles/couchdb-cookie-authentication-nodejs-nano/
-  https://www.npmjs.org/package/nano
-* attachments
-* batching requests?
- This object will internally keep track of revisions it's seen before and
- batches http requests that happen in the same "tick" to go out at the same time
- using CouchDB's batch processing APIs.
- https://github.com/creationix/couch-client
-* incorporate reliable changes lib
+Do this after the tests are written, so to make sure nothing gets broken..
+** session support for node version
+   http://codetwizzle.com/articles/couchdb-cookie-authentication-nodejs-nano/
+   https://www.npmjs.org/package/nano
+** attachments
+** batching requests?
+  This object will internally keep track of revisions it's seen before and
+  batches http requests that happen in the same "tick" to go out at the same time
+  using CouchDB's batch processing APIs.
+  https://github.com/creationix/couch-client
+** incorporate reliable changes lib
 https://github.com/iriscouch/follow
-* streaming of attachments
-  See https://github.com/flatiron/cradle
-  
-* finish api
- conflicts and resolutions 
-* write tests
+** streaming of attachments
+   See https://github.com/flatiron/cradle
+   
+** finish api
+  conflicts and resolutions 
+** !!!!!!!!!!!!!!!!!11write tests
 for node and web 
-* use generators instead of only promises
-* or make clojurescript version using core-async 
+add to readme how to do the tests
+** use generators instead of only promises
+** or make clojurescript version using core-async 
+   
+* similar
+works on browser and node: 
+   https://github.com/qualiancy/supercouch
