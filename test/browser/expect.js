@@ -1,5 +1,5 @@
  var expect = {
- "pouchdb": {
+ "pouch": {
   "info()": {
    "pouchdb": "Welcome",
    "version": "2.2.2"
@@ -10,7 +10,7 @@
   },
   "dbAll()": []
  },
- "http://localhost:5984": {
+ "couch": {
   "info()": {
    "couchdb": "Welcome",
    "uuid": "1c9838cecb2feae6a7eadd7eab9f21dd",

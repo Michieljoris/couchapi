@@ -1,6 +1,9 @@
 var tests = [
+    // ['info'], function(expect, result) {
+    //     return DeepDiff(expect, result);
+    // }
     ['info']
-    ,['config'] 
+    ,['config']
     ,['login', 'root', 'root']
     ,['login', 'admin', 'admin']
     ,['config']
@@ -11,7 +14,8 @@ var tests = [
     ,['login', 'admin', 'admin']
     ,['session']
   
-    // ,['userRemove', 'someUser']
+    ,['userRemove', 'Adrian']
+    ,['docAll', '_users']
     // ,['userAdd', 'someUser', 'pwd', ['someRole']]
     // // ,['userGet', 'someUser']
     // // ,['userUpdate', 'someUser', { "someProp": "someValue"}]

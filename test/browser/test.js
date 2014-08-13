@@ -10,11 +10,11 @@
     var compare = false;
     // var url = 'http://admin:admin@localhost:5984';
     var url = 'http://localhost:5984';
-    var lines = 5;
+    var lines = 20;
 
     var inNode;
 
-    function writeFn(a) {
+    function makeFunId(a) {
         var s = JSON.stringify(a.slice(1));
         return a[0] + '(' + s.slice(1,s.length-1) + ')';
     }
@@ -34,22 +34,39 @@
         var last;
         tests = tests.filter(function(test) {
             if (!test.constructor.name === 'Array') {
-                bla[writeFn(last)] = test;
+                bla[makeFunId(last)] = test;
                 return false;
             }
             last = test;
             return true;
         });
     }
+    
 
-    function go(tests, expect, couchUrl) {
+    function go(tests, expect, couchUrl, validators) {
         printWithColor(url, 'blue', '');
         var vow = VOW.make();
         var counter = 0;
-        var results = { pouchdb: {} };
-        results[couchUrl] = {};
+        var results = { pouch: {}, couch: {} };
+        // results[couchUrl] = {};
+        var index = 0;
+        function process(url, fun, data) {
+            // console.log('%c'+ (url ? 'couch:' : 'pouch:') + writeFn(fun),
+            //             'text-decoration:underline;color:green',  ': ', data);
+            // var adapter = url ? couchUrl : 'pouchdb';
+            var adapter = url ? 'couch' : 'pouch';
+            // print((url ? 'couch:' : 'pouch:') + makeFunId(fun), data);
+            print(adapter + ': ' + makeFunId(fun), data);
+            var funId = makeFunId(fun);
+            results[adapter][index + funId] = data;
+            // var validator = validators[adapter][funId];
+            // if (!validator) validator = DeepDiff;
+            // validators[adapter][index + funId] = validator(expect[adapter][index + funId], data);
+            if (!url) console.log('--');
+            index++;
+        }
+        
         function recur() {
-
             if (counter === tests.length) {
                 vow.keep(results);
                 return;
@@ -64,23 +81,22 @@
                     vouchdb.connect(url);
                     test.apply(null, fun).when(
                         function(data) {
-                            // console.log('%c'+ (url ? 'couch:' : 'pouch:') + writeFn(fun),
-                            //             'text-decoration:underline;color:green',  ': ', data);
-                            print((url ? 'couch:' : 'pouch:') + writeFn(fun), data);
-                            var id = url ? couchUrl : 'pouchdb';
-                            results[id][writeFn(fun)] = data;
-                            if (!url) console.log('--');
+                            process(url, fun, data);
+                            cb();
+                        },
+                        function(data) {
+                            process(url, fun, data);
                             cb();
                         }
-                        ,function(err) {
+                        //     ,function(err) {
 
-                            print((url ? 'couch:' : 'pouch:') + writeFn(fun), err);
-                            // console.log('%c'+ (url ? 'couch:' : 'pouch:') + writeFn(fun),
-                            //             'text-decoration:underline;color:green',  ': ', err);
-                            results[url ? couchUrl : 'pouchdb'][writeFn(fun)] = err;
-                            if (!url) console.log('--');
-                            cb();
-                        }
+                        //         print((url ? 'couch:' : 'pouch:') + makeFunId(fun), err);
+                        //         // console.log('%c'+ (url ? 'couch:' : 'pouch:') + writeFn(fun),
+                        //         //             'text-decoration:underline;color:green',  ': ', err);
+                        //         results[url ? couchUrl : 'pouchdb'][makeFunId(fun)] = err;
+                        //         if (!url) console.log('--');
+                        //         cb();
+                        //     }
                     );
 
                 };
@@ -111,7 +127,7 @@
             str = [str[color],
                    util.inspect(str2, { depth:10, colors:false }).split('\n').slice(0, lines)
                    // str2 ? str2.toString() : ''
-                   ];
+                  ];
         }
         else {
             str = ['%c' + str , 'color:' + color + ';', str2 || ''];
@@ -125,7 +141,8 @@
     }
 
 
-    go(tests, expect, url)
+    var validators = { pouch: {}, couch: {} };
+    go(tests, expect, url, validators)
         .when(
             function(result) {
                 // console.log('%c\nPouchDB:', 'font-size:15px;color:green;');
@@ -141,6 +158,7 @@
                 else console.log('%cFailed tests:\n' + JSON.stringify(DeepDiff(expect, result), null, ' ') ,
                                  'color:red;font-weight:bold'
                                 );
+                console.log('Validators: ', validators);
                 // couchapi.init();
                 // return go(tests);
             })
