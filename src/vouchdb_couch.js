@@ -101,8 +101,12 @@
                     }
                 }
             },
+            error: function(msg) { 
+                        if (options.error) {
+                            options.error(401, msg.error, msg.code);
+                }
+                                 },
             complete: function(req) {
-                // console.log('in query' , req);
                 try {
                     var resp = parseJSON(req.responseText);
                 } catch(e) {
@@ -124,7 +128,7 @@
                     options.error(req.status, resp && resp.reason ||
                                   errorMessage, resp && resp.error || "no response");
                 } else {
-                    throw errorMessage + ": " + resp.reason;
+                    throw errorMessage + ": " + req.status || resp.reason;
                 }
             }
         }, obj), ajaxOptions));
@@ -1122,21 +1126,23 @@
          * misc_uuids_get">docs for /_uuids</a>
          * @param {Int} cacheNum Number of uuids to keep cached for future use
          */
-        newUUID: function(cacheNum) {
+        newUUID: function(options, cacheNum) {
             if (cacheNum === undefined) {
                 cacheNum = 1;
             }
             if (!uuidCache.length) {
-                ajax({url: this.urlPrefix + "/_uuids", data: {count: cacheNum}, couch:
-                      false}, {
-                          success: function(resp) {
-                              uuidCache = resp.uuids;
-                          }
-                      },
+                ajax({url: this.urlPrefix + "/_uuids?count=" + cacheNum},
+                     {
+                         success: function(resp) {
+                             uuidCache = resp.uuids;
+                             options.success(uuidCache.shift());
+                         },
+                         error: options.error
+                     },
                      "Failed to retrieve UUID batch."
                     );
             }
-            return uuidCache.shift();
+            else options.success(uuidCache.shift());
         }
     };
     return api;

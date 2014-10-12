@@ -882,7 +882,9 @@
     //Fetch a new UUID. If `batchSize` is defined a number of uuids are fetched
     //at once and cached
     api.uuid = function(batchSize) {
-        return vouch.newUUID(batchSize);
+        var vowed = vowerify(); 
+        vouch.newUUID(vowed.options, batchSize);
+        return vowed.promise;
     };
 
     //###test
