@@ -139,12 +139,9 @@
     //##Users
     //###userAdd
     //Add a user to the `_user` database
-    api.userAdd = function(name, pwd, roles) {
+    api.userAdd = function(name, pwd) {
         var vowed = vowerify();
-        var userDoc = {
-            name: name,
-            roles: roles
-        };
+        var userDoc = typeof name !== 'string' ? name : { name: name };
         vouch.signup(userDoc, pwd, vowed.options);
         return vowed.promise;
     };
@@ -308,13 +305,17 @@
     //###dbChanges
     
     //The passed in *callback* will be called with the changes. Call returned
-    //object.stop to finish receiving changes.
-    api.dbChanges = function(callback, since, aDbName) {
-        var changes = vouch.db(aDbName || dbName).changes(since, {});
+    //function to stop receiving changes.
+    api.dbChanges = function(callback, since, options, aDbName) {
+        if (typeof options === 'string') {
+            aDbName = options; 
+            options = {};   
+        }
+        var changes = vouch.db(aDbName || dbName).changes(since, options);
         changes.onChange(
             callback 
         );
-        return changes;
+        return changes.stop;
     };
         
     //###dbInfo

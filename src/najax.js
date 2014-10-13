@@ -143,11 +143,11 @@ function request(options, a, b) {
     //DATA
     /* massage request data according to options */
     o.data = o.data || '';
-    o.contentType = o.contentType ? 'application/'+o.contentType :'application/x-www-form-urlencoded';
+    o.contentType = o.contentType ? o.contentType :'application/x-www-form-urlencoded';
 
     if(!o.encoder){ 
 	switch(o.contentType){
-	  case 'application/json': o.data = JSON.stringify(o.data); break;
+	  // case 'application/json': o.data = JSON.stringify(o.data); break;
 	  case 'application/x-www-form-urlencoded': o.data = querystring.stringify(o.data); break;
 	default: o.data = o.data.toString();
 	}
@@ -161,13 +161,13 @@ function request(options, a, b) {
     }
 
     /* if get, use querystring method for data */
-        var requestOptions = {
-	    host: l.hostname,
-	    path: l.pathname + (l.search||''),
-	    method: o.type,
-	    port: l.port || (ssl? 443 : 80),
-            headers: {}
-        };
+    var requestOptions = {
+	host: l.hostname,
+	path: l.pathname + (l.search||''),
+	method: o.type,
+	port: l.port || (ssl? 443 : 80),
+        headers: {}
+    };
 
     
     /* set data content type */
@@ -210,6 +210,7 @@ function request(options, a, b) {
 	return getopts;
     }
 
+    // console.log('o:', o);
     // console.log('requestOptions as requested in najax:', requestOptions);
     //REQUEST
     var req = (ssl ? https : http).request(requestOptions, function(res) {
@@ -253,6 +254,7 @@ function request(options, a, b) {
 
     //SEND DATA
     if (o.type !== 'GET' && o.data) {
+        // console.log('sending data:', o.data);
 	req.write(o.data , 'utf-8');
     }
     req.end();
