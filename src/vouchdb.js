@@ -74,6 +74,9 @@
     // value will be stored in the configuration.
     api.config = function(section, option, value) {
         var vowed = vowerify(); 
+        if (value === null) value = 'null';
+        else if (typeof value !== 'undefined') 
+            value = value.toString();
         vouch.config(vowed.options, section, option, value);
         return vowed.promise;
     };
@@ -293,6 +296,32 @@
         vouch.db(name || dbName).create(vowed.options);
         return vowed.promise;
     }; 
+    
+    //###dbEnsureExists
+    //Ensure passed in db exists and if not creates it.
+    api.dbEnsureExists = function(name) {
+        var vow = VOW.make();
+        api.dbInfo(name)
+            .when(
+                function(info) {
+                    vow.keep(info);
+                }
+                ,function(err) {
+                    if (err.reason === 'no_db_file') {
+                        api.dbCreate(name).when(
+                            function(data) {
+                                vow.keep(data);
+                            },
+                            function(err) {
+                                vow.breek(err);
+                            }
+                        );
+                    }
+                    else vow.breek(err);
+                }
+            );
+        return vow.promise;
+    };
 
     //###dbCompact
     //Request compaction of the specified database.
@@ -320,7 +349,7 @@
         
     //###dbInfo
     
-    // Gets information about the specified database.
+        // Gets information about the specified database.
     api.dbInfo = function(name) {
         var vowed = vowerify(); 
         vouch.db(name || dbName).info({
@@ -407,7 +436,7 @@
     //###dbFilter
     //Set or get the a filter. 
     api.dbFilter = function(docName, filterName, funStr, aDbName) {
-        return api.dbDesign(docName, 'filters', filterName, funStr, aDbName);
+            return api.dbDesign(docName, 'filters', filterName, funStr, aDbName);
     };
     
     var conflictsMap = function(doc) {
@@ -434,32 +463,32 @@
         return vow.promise;
     }
         
-    function getRevs(ids, aDbName) {
-        var vow = VOW.make();
-        var getters = {};
-        var idVows = [];
-        Object.keys(ids).forEach(function(id) {
-            getters[id] = [];
-            var revs = ids[id]; 
-            revs.forEach(function(rev) {
-                getters[id].push(api.docGet(id, { 'rev': rev}, aDbName));
-            });
-            idVows.push(VOW.every(getters[id]));
-        });
-        if (idVows.length === 0) vow.keep([]);
-        else VOW.every(idVows).when(
-            function(data) {
-                var conflicts = {};
-                data.forEach(function(doc) {
-                    conflicts[doc[0]._id] = doc;
+        function getRevs(ids, aDbName) {
+            var vow = VOW.make();
+            var getters = {};
+            var idVows = [];
+            Object.keys(ids).forEach(function(id) {
+                getters[id] = [];
+                var revs = ids[id]; 
+                revs.forEach(function(rev) {
+                    getters[id].push(api.docGet(id, { 'rev': rev}, aDbName));
                 });
+                idVows.push(VOW.every(getters[id]));
+            });
+            if (idVows.length === 0) vow.keep([]);
+            else VOW.every(idVows).when(
+                function(data) {
+                    var conflicts = {};
+                    data.forEach(function(doc) {
+                        conflicts[doc[0]._id] = doc;
+                    });
                     
-                vow.keep(conflicts);
-            },
-            vow.break
-        );
-        return vow.promise;
-    }
+                    vow.keep(conflicts);
+                },
+                vow.break
+            );
+            return vow.promise;
+        }
 
     //###dbConflicts
     
@@ -471,22 +500,22 @@
             aDbName = fetchDocs;   
             fetchDocs = false;
         }
-        checkForConflictsView().when(
-            function() {
-                return api.view('vouchdb', 'conflicts', aDbName);
-            }
-        ).when(
-            function(data) {
-                var idsWithConflicts = {};
-                data.rows.forEach(function(r){
-                    idsWithConflicts[r.id] = r.value; 
-                });
-                if (!fetchDocs) return VOW.kept(idsWithConflicts);
-                else return getRevs(idsWithConflicts, aDbName);
-            }).when(
-                vowed.options.success,
-                vowed.options.error
-            );
+            checkForConflictsView().when(
+                function() {
+                    return api.view('vouchdb', 'conflicts', aDbName);
+                }
+            ).when(
+                function(data) {
+                    var idsWithConflicts = {};
+                    data.rows.forEach(function(r){
+                        idsWithConflicts[r.id] = r.value; 
+                    });
+                    if (!fetchDocs) return VOW.kept(idsWithConflicts);
+                    else return getRevs(idsWithConflicts, aDbName);
+                }).when(
+                    vowed.options.success,
+                    vowed.options.error
+                );
         return vowed.promise;
     };
         
@@ -516,7 +545,7 @@
     //      GET docid?rev=xxx
     //    If any errors occur at this stage, restart from step 1.
     //    (There could be a race where someone else has already resolved this
-    //    conflict and deleted that rev)
+        //    conflict and deleted that rev)
     //3. Perform application-specific merging
     //4. Write _bulk_docs with an update to the first rev and deletes of
     //    the other revs.
@@ -697,7 +726,7 @@
         }
         var vowed = vowerify(); 
         if (keys) vowed.options.keys = keys;
-        vouch.db(aDbName || dbName).allDocs(vowed.options);
+            vouch.db(aDbName || dbName).allDocs(vowed.options);
         return vowed.promise;
     };
         
@@ -747,22 +776,27 @@
     };
     
     //###docUpdate
-    //Updates a document
+    //Updates a document, overwriting current doc or if it doesn't exist writes
+    //a new one.
     api.docUpdate = function(doc, aDbName) {
-        var vowed = vowerify();
+        var vow = VOW.make();
         api.docGet(doc._id, aDbName).when(
             function(fetchedDoc) {
                 doc._rev = fetchedDoc._rev;
-                return api.docSave(doc, aDbName);
-            }).when(
-                function(data) {
-                    vowed.options.success(data);
-                },
-                function(err) {
-                    vowed.options.error(null, err);
-                }
-            );  
-        return vowed.promise;
+                api.docSave(doc, aDbName)
+                    .when(
+                        vow.keep, vow.breek
+                    );
+            },
+            function(err) {
+                api.docSave(doc, aDbName)
+                    .when(
+                        vow.keep, vow.breek
+                    );
+                // vowed.options.error(null, err);
+            }
+        );
+        return vow.promise;
     };
         
     //##Views
@@ -816,7 +850,7 @@
         return vowed.promise;
     };
     
-        //##Replications
+    //##Replications
 
     //###replicate
     //Convenience function to set up a replication
@@ -861,9 +895,9 @@
         var vowed = vowerify(options); 
         vouch.db(aDbName || dbName).list(designDoc + '/' + listName,'all', vowed.options);
         return vowed.promise;
-        };
+    };
 
-    //###taskActive
+        //###taskActive
     // You can obtain a list of active tasks by using the /_active_tasks URL.
     // The result is a JSON array of the currently running tasks, with each task
     // being described with a single object.
@@ -890,7 +924,7 @@
 
     //###test
     //Test function for all of the above.
-    //
+        //
     //Pass in the name of the api function as the first argument, and the
     //arguments for the function as the rest of the arguments. The promise will
     //resolved and result printed out togehter with returned data or error
