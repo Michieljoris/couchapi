@@ -853,25 +853,67 @@
     //##Replications
 
     //###replicate
-    //Convenience function to set up a replication
+    // Convenience function to set up a replication, unless specified otherwise
+    //in repOptions the target will be created and the role of _admin userCtx
+    //assigned to the replication
     api.replicate = function(db1, db2, repOptions) {
         var repDoc = repOptions || {};
+        repDoc.create_target = repDoc.create_target || true;
+        repDoc.role = repOptions.role || "_admin";
         repDoc.source = db1;
         repDoc.target = db2;
+        console.log(repDoc);
         return api.replicationAdd(repDoc);
     };
+
+    //###setReplication
+    //Convenience function to set/update a replication, replication will be
+    //removed first (cancelled) when it exists already
+    api.setReplication = function(id, repOptions) {
+        var vow = VOW.make();
+        repOptions._id = id;
+        repOptions.create_target = repOptions.create_target || true;
+        repOptions.role = repOptions.role || "_admin";
+        function addRep(repDoc) {
+            api.replicationAdd(repOptions)
+                .when(
+                    function(data) {
+                        vow.keep(data);
+                    },
+                    function(err) {
+                        vow.breek(err);
+                    });
+        };
+        api.docRemove(id, "_replicator").when(
+            function(doc) {
+                addRep(repOptions);
+            },
+            function(err) {
+                addRep(repOptions);
+            }
+        );
+        return vow.promise;
+    };
+
         
     //###replicationAdd
     //Add a replication to the replicator database. repDoc can have the
     // following keys: "source", "target", "create_target", "continuous",
     // "doc_ids", "filter", "query_params", "user_ctx" , "since", "onChange", "complete"
     api.replicationAdd = function(repDoc) {
-        var vowed = vowerify();
-        repDoc._id = repDoc._id || api.uuid();
-        
-        if (repDoc.role)
+        var vowed = vowerify(); 
+        if (repDoc.role && !repDoc.user_ctx)
             repDoc.user_ctx = { "roles": [repDoc.role] };
-        vouch.replicate(repDoc, vowed.options);
+        console.log(repDoc);
+        var uuidPromise = repDoc._id ? VOW.kept(repDoc._id) : api.uuid();
+        uuidPromise.when(
+            function(uuid) {
+                vouch.replicate(repDoc, vowed.options);
+            },
+            function(err) {
+                vowed.options.error("Can't retrieve uuid", err);
+            }
+        );
         return vowed.promise;
     };
         
