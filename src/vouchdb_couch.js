@@ -1014,6 +1014,7 @@
                         delete options["keys"];
                         data = toJSON({ "keys": keys });
                     }
+
                     ajax({
                         type: type,
                         data: data,

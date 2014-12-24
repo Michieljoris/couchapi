@@ -1,3 +1,4 @@
+
 //A simple vows based wrapper for vouchdb_couch.js, which is a modified
 //jquery.couch.js, the jquery javascript adapter that comes with futon.
 
@@ -415,8 +416,13 @@
         }
         api.docGet('_design/' + docName, aDbName).when(
             function(designDoc) {
-                if (functionString === "?")
-                    vowed.options.success(designDoc[obj] ? designDoc[obj][functionName] : designDoc[functionName]);
+                if (functionString === "?") {
+                    var func = designDoc[obj] ?
+                        designDoc[obj][functionName] : designDoc[functionName];
+                if (func) vowed.options.success(func);
+                else vowed.options.error(functionName + ' not found in ' + docName
+                                         + '/' + obj);
+                }
                 else save(designDoc);
             },
             function() {
@@ -451,7 +457,9 @@
         var vow = VOW.make();
         api.dbDesign('vouchdb', 'views', 'conflicts', "?", aDbName).
             when(
-                vow.keep,
+                function(data) {
+                    vow.keep("conflicts view found");
+                },
                 function() {
                     api.dbDesign('vouchdb', 'views', 'conflicts', conflictsView, aDbName).
                         when(
@@ -500,22 +508,23 @@
             aDbName = fetchDocs;   
             fetchDocs = false;
         }
-            checkForConflictsView().when(
-                function() {
-                    return api.view('vouchdb', 'conflicts', aDbName);
-                }
-            ).when(
-                function(data) {
-                    var idsWithConflicts = {};
+
+        checkForConflictsView(aDbName).when(
+            function(data) {
+                return api.view('vouchdb', 'conflicts', {}, aDbName);
+            }
+        ).when(
+            function(data) {
+                var idsWithConflicts = {};
                     data.rows.forEach(function(r){
                         idsWithConflicts[r.id] = r.value; 
                     });
-                    if (!fetchDocs) return VOW.kept(idsWithConflicts);
-                    else return getRevs(idsWithConflicts, aDbName);
-                }).when(
-                    vowed.options.success,
-                    vowed.options.error
-                );
+                if (!fetchDocs) return VOW.kept(idsWithConflicts);
+                else return getRevs(idsWithConflicts, aDbName);
+            }).when(
+                vowed.options.success,
+                vowed.options.error
+            );
         return vowed.promise;
     };
         
@@ -653,6 +662,21 @@
     
     //Remove a document from a database. You either pass in the document's id or
     //the document itself.
+
+    api.docRemoveEnsure = function(doc, aDbName) {
+        var vowed = vowerify(); 
+        var id = typeof doc === 'string' ? doc : doc._id;
+        api.docGet(id, aDbName).when(
+            function(doc) {
+                vouch.db(aDbName || dbName).removeDoc(doc, vowed.options);
+            },
+            function(err) {
+                vowed.options.success("Doc did not exist already", err);
+            }
+        );
+        return vowed.promise;
+    };
+        
     api.docRemove = function(doc, aDbName) {
         if (typeof doc === 'string')
             return api.docRemoveById(doc, aDbName);
@@ -862,7 +886,6 @@
         repDoc.role = repOptions.role || "_admin";
         repDoc.source = db1;
         repDoc.target = db2;
-        console.log(repDoc);
         return api.replicationAdd(repDoc);
     };
 
@@ -904,7 +927,6 @@
         var vowed = vowerify(); 
         if (repDoc.role && !repDoc.user_ctx)
             repDoc.user_ctx = { "roles": [repDoc.role] };
-        console.log(repDoc);
         var uuidPromise = repDoc._id ? VOW.kept(repDoc._id) : api.uuid();
         uuidPromise.when(
             function(uuid) {
@@ -920,7 +942,7 @@
     //###replicationRemove
     //Remove a replication by removing the document from the replicator databasee
     api.replicationRemove = function(id) {
-        return api.docRemove(id, '_replicator');
+        return api.docRemoveEnsure(id, '_replicator');
     }; 
         
     //##Miscellaneous
